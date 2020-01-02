@@ -40,19 +40,15 @@ import sys
 
 import rcdtype
 
-
-#INVERSE = True # inverse-compositional version of ECC image alignment algo
 INVERSE = False # Forwards Additive Algorithm
 
-if False:
+if False:  # TODO: Fix conditional or delete code block.
     # See http://docs.continuum.io/mkl-service/index.html (also http://docs.continuum.io/mkl-optimizations/index.html, http://continuum.io/blog/mkl-optimizations)
     import mkl
     print("mkl.get_num_threads() = %s" % str(mkl.get_num_threads()));
     mkl.set_num_threads(2);
 
-#MATRIX_FLOAT_TYPE = np.float64;
 MATRIX_FLOAT_TYPE = np.float32;
-
 
 """
 FOOBAR is where I tried to use WITHOUT SUCCESS np.c_ and np.r_ instead of
@@ -61,30 +57,22 @@ FOOBAR is where I tried to use WITHOUT SUCCESS np.c_ and np.r_ instead of
 FOOBAR = False
 # Matlab traverses in find(A) the matrix A in column-major (Fortran) order
 ORDER_MATTERS = True
-
-#USE_DRIVER = True
 USE_DRIVER = False
-
-
 
 FitElem = rcdtype.recordtype("FitElem", "weights warp_p rms_error rho factor t")
 
-
-
-
-#if config.TESTING_IDENTICAL_MATLAB:
 captureR = None;
 captureQ = None;
 
 """
 We read frames from the video, be it input or reference (specified by capture).
 """
-def MyImageRead(capture, index):
-    global captureR, captureQ;
+def MyImageRead(capture, index, grayscale=True):
+    global captureR, captureQ
 
     if common.MY_DEBUG_STDOUT:
         common.DebugPrint("Entered MyImageRead(capture=%s, index=%s)" % \
-                                            (str(capture), str(index)));
+                                            (str(capture), str(index)))
     if config.USE_MULTITHREADING == True:
         """
         We must reopen the capture device in each different process, otherwise the
@@ -99,162 +87,119 @@ def MyImageRead(capture, index):
          This might be a limitation of the ffmpeg library when working multithreaded.
         """
         if capture == captureQ:
-            #capture = cv2.VideoCapture("/home/asusu/drone-diff_Videos/GoPro_clips/2/GOPR7269_clip_secs69-73.mp4");
-            #capture = cv2.VideoCapture("Videos/input.avi");
-            capture = cv2.VideoCapture(sys.argv[1]);
+            capture = cv2.VideoCapture(sys.argv[1])
 
             #!!!!TODO: find a good way to prevent reopening every time the VideoCapture device
             """
             CLEARLY NOT A GOOD SOLUTION to prevent reopening every time the VideoCapture device:
-                captureQ = capture;
+                captureQ = capture
             """
             if common.MY_DEBUG_STDOUT:
                 common.DebugPrint("MyImageRead(): new capture=%s" % \
-                                                    (str(capture)));
+                                                    (str(capture)))
         elif capture == captureR:
-            #capture = cv2.VideoCapture("/home/asusu/drone-diff_Videos/GoPro_clips/2/GOPR7313_clip_secs60-64.mp4");
-            #capture = cv2.VideoCapture("Videos/reference.avi");
-            capture = cv2.VideoCapture(sys.argv[2]);
+            capture = cv2.VideoCapture(sys.argv[2])
 
             #!!!!TODO: find a good way to prevent reopening every time the VideoCapture device
             """
             CLEARLY NOT A GOOD SOLUTION to prevent reopening every time the
                VideoCapture device:
-            captureR = capture;
+            captureR = capture
             """
             if common.MY_DEBUG_STDOUT:
                 common.DebugPrint("MyImageRead(): new capture=%s" % \
-                                                        (str(capture)));
+                                                        (str(capture)))
 
     if config.TESTING_IDENTICAL_MATLAB:
         if index < 0:
-            return np.zeros( (ReadVideo.resVideoQ[1] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR, \
-                              ReadVideo.resVideoQ[0] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR), \
-                                dtype=np.uint8); #!!!!TODO: should we return * 3, for RGB?
+            return np.zeros( (ReadVideo.resVideoQ[1] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR,
+                              ReadVideo.resVideoQ[0] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR),
+                                dtype=np.uint8) #!!!!TODO: should we return * 3, for RGB?
 
         if capture == captureR:
-            videoPathFileName = "Videos/reference/00%4d.jpeg" % (2001 + index); #2001.jpeg";
+            videoPathFileName = "Videos/reference/00%4d.jpeg" % (2001 + index)
         elif capture == captureQ:
-            videoPathFileName = "Videos/input/00%4d.jpeg" % (1001 + index); #2001.jpeg";
+            videoPathFileName = "Videos/input/00%4d.jpeg" % (1001 + index)
         else:
             assert False;
 
         if config.OCV_OLD_PY_BINDINGS:
-            img = cv2.imread(videoPathFileName, cv2.CV_LOAD_IMAGE_GRAYSCALE);
+            img = cv2.imread(videoPathFileName, cv2.CV_LOAD_IMAGE_GRAYSCALE)
         else:
-            img = cv2.imread(videoPathFileName, cv2.IMREAD_GRAYSCALE);
+            img = cv2.imread(videoPathFileName, cv2.IMREAD_GRAYSCALE)
 
         if common.MY_DEBUG_STDOUT:
-            common.DebugPrint( \
+            common.DebugPrint(
                     "ecc_homo_spacetime.MyImageRead(): img.shape = %s" % \
-                                                        (str(img.shape)));
-            common.DebugPrint( \
+                                                        (str(img.shape)))
+            common.DebugPrint(
                     "ecc_homo_spacetime.MyImageRead(): img.dtype = %s" % \
-                                                        (str(img.dtype)));
-            common.DebugPrint( \
+                                                        (str(img.dtype)))
+            common.DebugPrint(
                     "ecc_homo_spacetime.MyImageRead(): img[:10, :10] = %s" % \
-                                                        (str(img[:10, :10])));
+                                                        (str(img[:10, :10])))
 
         if config.VIDEO_FRAME_RESIZE_SCALING_FACTOR != 1:
             # We resize the image
-            imgGray = Matlab.imresize(imgGray, \
-                            scale=config.VIDEO_FRAME_RESIZE_SCALING_FACTOR); #/2.0); #*2.0
+            img = Matlab.imresize(img,
+                            scale=config.VIDEO_FRAME_RESIZE_SCALING_FACTOR)
 
-        return img;
+        return img
 
     if index < 0:
         if common.MY_DEBUG_STDOUT:
-            common.DebugPrint("MyImageRead(): index < 0 --> returning black frame");
-        #return np.zeros( ReadVideo.resVideoQ );
-        return np.zeros( (ReadVideo.resVideoQ[1] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR, \
-                          ReadVideo.resVideoQ[0] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR), \
-                            dtype=np.uint8);  #!!!!TODO: should we return *3 for RGB
+            common.DebugPrint("MyImageRead(): index < 0 --> returning black frame")
+        return np.zeros( (ReadVideo.resVideoQ[1] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR,
+                          ReadVideo.resVideoQ[0] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR,
+                          (1 if grayscale else 3)), dtype=np.uint8)
 
     index *= config.counterRStep;
 
     if common.MY_DEBUG_STDOUT:
-        common.DebugPrint("MyImageRead(): index = %s" % (str(index)));
+        common.DebugPrint("MyImageRead(): index = %s" % (str(index)))
 
     if config.OCV_OLD_PY_BINDINGS:
-        capture.set(cv2.cv.CV_CAP_PROP_POS_FRAMES, index);
+        capture.set(cv2.cv.CV_CAP_PROP_POS_FRAMES, index)
     else:
         """
         From http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture-get:
             <<CV_CAP_PROP_POS_FRAMES 0-based index of the frame to be
               decoded/captured next.>>
         """
-        capture.set(cv2.CAP_PROP_POS_FRAMES, index);
+        capture.set(cv2.CAP_PROP_POS_FRAMES, index)
 
-    # This is only for (paranoid) testing purposes:
-    if config.OCV_OLD_PY_BINDINGS:
-        indexCrt = capture.get(cv2.cv.CV_CAP_PROP_POS_FRAMES);
-    else:
-        """
-        From http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture-get:
-            <<CV_CAP_PROP_POS_FRAMES 0-based index of the frame to be
-              decoded/captured next.>>
-        """
-        indexCrt = capture.get(cv2.CAP_PROP_POS_FRAMES);
+    ret, img = capture.read()
 
-    #assert int(indexCrt) == index;
-    #!!!!TODO: think if OK
-    if int(indexCrt) != index:
-        #if common.MY_DEBUG_STDOUT:
-        print("MyImageRead(): indexCrt != index --> returning black frame");
-        ret = False;
-    else:
-        """
+    if not ret:
         if common.MY_DEBUG_STDOUT:
-            common.DebugPrint("Alex: frameR = %d" % frameR);
-        """
-
-        #if myIndex > numFramesR:
-        #    break;
-
-        #ret, img = r_path.read();
-        ret, img = capture.read();
-        #if ret == False:
-        #    break;
-
-    #!!!!TODO: think if well
-    #assert ret == True;
-    if ret == False:
-        if common.MY_DEBUG_STDOUT:
-            common.DebugPrint( \
-                "MyImageRead(): ret == False --> returning black frame");
-        img = np.zeros( (ReadVideo.resVideoQ[1] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR, \
-                         ReadVideo.resVideoQ[0] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR, \
-                         3), \
-                            dtype=np.uint8);
+            common.DebugPrint(
+                "MyImageRead(): ret == False --> returning black frame")
+        img = np.zeros( (ReadVideo.resVideoQ[1] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR,
+                         ReadVideo.resVideoQ[0] * config.VIDEO_FRAME_RESIZE_SCALING_FACTOR,
+                         1 if grayscale else 3),
+                            dtype=np.uint8)
     if common.MY_DEBUG_STDOUT:
-        common.DebugPrint("MyImageRead(): img.shape = %s" % str(img.shape));
-        common.DebugPrint("MyImageRead(): img.dtype = %s" % str(img.dtype));
+        common.DebugPrint("MyImageRead(): img.shape = %s" % str(img.shape))
+        common.DebugPrint("MyImageRead(): img.dtype = %s" % str(img.dtype))
 
-    # In the Matlab code he reads gray/8bpp JPEGs
-    imgGray = common.ConvertImgToGrayscale(img);
-    #assert ret;
+    img = common.ConvertImgToGrayscale(img)
 
-    #if True:
-    #if False:
     if config.VIDEO_FRAME_RESIZE_SCALING_FACTOR != 1:
         # We resize the image
-        imgGray = Matlab.imresize(imgGray, \
-                        scale=config.VIDEO_FRAME_RESIZE_SCALING_FACTOR); #/2.0); #*2.0
+        img = Matlab.imresize(img,
+                        scale=config.VIDEO_FRAME_RESIZE_SCALING_FACTOR) #/2.0); #*2.0
 
     # If np.set_options...() specify very verbose, it prints all bytes of img :)), so better not do it
     if common.MY_DEBUG_STDOUT:
         common.DebugPrint("  MyImageRead(%s, %d): img = %s" % \
-                                    (str(capture), index, str(img)));
-
-    if common.MY_DEBUG_STDOUT:
-        common.DebugPrint("Exiting MyImageRead()");
+                                    (str(capture), index, str(img)))
+        common.DebugPrint("Exiting MyImageRead()")
 
     """
     We can apply the Canny operator on the input image(s) in attempt to
     reduce the time to execute the ECC algorithm.
     """
-    #if True:
-    if False:
+    if False: # TODO: Fix this conditional or delete code block.
         #for i in range(xxx.shape[2]):
             # Inspired from http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_imgproc/py_canny/py_canny.html
             #xxx[:, :, i] = cv2.Canny(xxx[:, :, i], 100, 200);
@@ -262,7 +207,7 @@ def MyImageRead(capture, index):
         # See http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny
         imgGray = cv2.Canny(imgGray, 170, 200);
 
-    return imgGray;
+    return img
 
 
 def next_level(warp_in, transform, high_flag):
@@ -338,9 +283,8 @@ def next_level(warp_in, transform, high_flag):
 
     if common.MY_DEBUG_STDOUT:
         common.DebugPrint("next_level(warp_in=%s, transform, high_flag)" % \
-                                                            str(warp_in));
+                                                            str(warp_in))
 
-    #warp=warp_in;
     warp = warp_in;
 
     if high_flag == 1:

@@ -13,9 +13,9 @@ DISPLAY_RIGHT_IMAGE_WITH_DIFF = False
 
 
 SAVE_FRAMES = True
-#SAVE_FRAMES = False
 #SHOW_FRAMES = True
 
+VISUAL_DIFF_OUTPUT = True
 
 IMAGES_FOLDER = "Img"
 FRAME_PAIRS_FOLDER = IMAGES_FOLDER + "/Img_Frames_Pairs" # Not really used anymore since we save for efficiency ONLY matches
@@ -43,9 +43,7 @@ counterRStep = 1 #25 #200 #10
 
 
 ##################### EVANGELIDIS ALGORITHM RELATED ###########################
-##################### EVANGELIDIS ALGORITHM RELATED ###########################
-##################### EVANGELIDIS ALGORITHM RELATED ###########################
-##################### EVANGELIDIS ALGORITHM RELATED ###########################
+
 VIDEOS_FOLDER = "Videos"
 HARRIS_FILENAME_EXTENSION = ".csv"
 HARRIS_FILENAME_PREFIX = "harloc"
@@ -103,7 +101,9 @@ VISUAL_DIFF_FRAMES = False
 MEANINGFUL_DIFF_THRESHOLD = 30; #90; #30
 
 
-# SPATIAL ALIGNMENT parameters (originally in SpatialAlignment.py / alignment.m)
+##################### SPATIAL ALIGNMENT RELATED ###########################
+SKIP_SPATIAL_ALIGNMENT = False
+
 # Usually nof=2 is good for all resolutions we used
 nof = 2; #5; #%number of frames for sub-sequences
 cropflag = 0; #% flag for cropped images (use 0)
