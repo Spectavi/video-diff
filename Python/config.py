@@ -92,7 +92,7 @@ MEANINGFUL_DIFF_THRESHOLD = 30
 
 
 ##################### SPATIAL ALIGNMENT RELATED ###########################
-SKIP_SPATIAL_ALIGNMENT = True
+SKIP_SPATIAL_ALIGNMENT = False
 
 # Usually nof=2 is good for all resolutions we used
 nof = 2; #5; #%number of frames for sub-sequences
@@ -141,7 +141,7 @@ weighted_flag = 1  #% when 1, it considers a self-weighted version of ECC, not e
 affine_time = 0
 seq2seq = 0
 
-imformat = ".png"
+imformat = ".jpg"  # Saving as .jpg is faster than .png.
 
 """
 See email from Evangelidis, Apr 14, 2014:

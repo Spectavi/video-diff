@@ -34,7 +34,7 @@ def OutputCrossrefImages(crossref, captureQ, captureR):
         r_idx = int(r_idx)
 
         if common.MY_DEBUG_STDOUT:
-          t1 = float(cv2.getTickCount())
+            t1 = float(cv2.getTickCount())
 
         qframe = MyImageRead(captureQ, q_idx, grayscale=False)
         gray_qframe = common.ConvertImgToGrayscale(qframe)
