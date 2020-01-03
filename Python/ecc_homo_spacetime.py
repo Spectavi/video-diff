@@ -35,7 +35,7 @@ import os
 import math
 import numpy as np
 from numpy import linalg as npla
-import scipy.weave
+import weave
 import sys
 
 import rcdtype

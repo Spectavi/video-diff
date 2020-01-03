@@ -1,21 +1,13 @@
 PREPROCESS_REFERENCE_VIDEO_ONLY = True
-#PREPROCESS_REFERENCE_VIDEO_ONLY = False
-#PREPROCESS_REFERENCE_VIDEO_ONLY = "do_all" # I guess this should execute the entire algorithm in one run
 
-OCV_OLD_PY_BINDINGS = True # This is to use the Python bindings to the OpenCV 2.x APIs (still has Python bindings to cv::Mat; does NOT use NumPy that much)
-#OCV_OLD_PY_BINDINGS = False # This is to use the new slightly different APIs from latest OpenCV 3.0 (uses NumPy)
+# Set to True only when using OpenCV 2.x or older, otherwise False.
+OCV_OLD_PY_BINDINGS = False
 
 USE_GUI = False
-#USE_GUI = True
-
 DISPLAY_RIGHT_IMAGE_WITH_DIFF = False
-#DISPLAY_RIGHT_IMAGE_WITH_DIFF = True
-
-
 SAVE_FRAMES = True
-#SHOW_FRAMES = True
-
-VISUAL_DIFF_OUTPUT = True
+VISUAL_DIFF_FRAMES = True
+SHOW_MASKED_DIFF = True  # Save RGB images masked to only show diff regions.
 
 IMAGES_FOLDER = "Img"
 FRAME_PAIRS_FOLDER = IMAGES_FOLDER + "/Img_Frames_Pairs" # Not really used anymore since we save for efficiency ONLY matches
@@ -50,9 +42,9 @@ HARRIS_FILENAME_PREFIX = "harloc"
 HARRIS_QUERY_FOLDER_NAME = "harlocs_query"
 HARRIS_REFERENCE_FOLDER_NAME = "harlocs_ref"
 
-
-USE_EVANGELIDIS_ALGO = True # Use port of Evangelidis' 2013 TPAMI algorithm from Matlab)
-#USE_EVANGELIDIS_ALGO = False # Use our simple (~brute-force) video alignment algo
+# True to use a port of Evangelidis' 2013 TPAMI algorithm from Matlab.
+# False to use our simple (~brute-force) video alignment algo.
+USE_EVANGELIDIS_ALGO = True
 
 MULTI_SCALE_HARRIS = 0 # a la Evangelidis (slower, but good qualitatively)
 #MULTI_SCALE_HARRIS = 1 # using Harris OpenCV primititve - much faster (~10 times) than 0, but poorer results
@@ -90,19 +82,17 @@ Alex: Unfortunately, there is very little documentation on the Python bindings f
         flann_Index([features, params[, distType]]) -> <flann_Index object>
 """
 
-#USE_MULTITHREADING = True
 USE_MULTITHREADING = False
-numProcesses = 3; #2;
+numProcesses = 3
 
 VISUAL_DIFF_FRAMES = False
-#VISUAL_DIFF_FRAMES = True
 
 # We filter out the single-pixel differences between the 2 frames that are very small in colour
-MEANINGFUL_DIFF_THRESHOLD = 30; #90; #30
+MEANINGFUL_DIFF_THRESHOLD = 30
 
 
 ##################### SPATIAL ALIGNMENT RELATED ###########################
-SKIP_SPATIAL_ALIGNMENT = False
+SKIP_SPATIAL_ALIGNMENT = True
 
 # Usually nof=2 is good for all resolutions we used
 nof = 2; #5; #%number of frames for sub-sequences
@@ -140,18 +130,18 @@ iterECC = 15; #%iterations of ECC
 #EPS_ECC = 0.00001;
 #EPS_ECC = 0.0001;
 #EPS_ECC = 0.00000001;
-EPS_ECC = 0.001; # The default EPS used by cv::findTransformECC()
+EPS_ECC = 0.001  # The default EPS used by cv::findTransformECC()
 
-verboseECC = 1; #% save/see the spatial alignment (and if want, uncomment to get a pause per frame)
+verboseECC = 1  #% save/see the spatial alignment (and if want, uncomment to get a pause per frame)
 
-pixel_select = 0; #% when 1, it considers only pixels around salient points
-time_flag = 0; #% when 0, it does only spatial alignment even in seq2seq
-weighted_flag = 1; #% when 1, it considers a self-weighted version of ECC, not explained in PAMI paper
+pixel_select = 0  #% when 1, it considers only pixels around salient points
+time_flag = 0  #% when 0, it does only spatial alignment even in seq2seq
+weighted_flag = 1  #% when 1, it considers a self-weighted version of ECC, not explained in PAMI paper
 
-affine_time = 0;
-seq2seq = 0;
+affine_time = 0
+seq2seq = 0
 
-imformat = ".png"; #".jpeg"; #% Output image format
+imformat = ".png"
 
 """
 See email from Evangelidis, Apr 14, 2014:
