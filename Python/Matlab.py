@@ -6,7 +6,7 @@ from numpy import linalg as npla
 import sys
 import scipy.interpolate
 import scipy.sparse
-import scipy.weave
+import weave
 import unittest
 
 import common

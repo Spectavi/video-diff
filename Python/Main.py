@@ -106,6 +106,8 @@ if __name__ == '__main__':
         CV_CPU_POPCNT - POPCOUNT
         CV_CPU_AVX - AVX
     """
+    # TODO: Figure out the correct way to reference these in OpenCV 3.x
+    """
     if config.OCV_OLD_PY_BINDINGS == False:
         featDict = {cv2.CPU_AVX: "AVX",
                 cv2.CPU_MMX: "MMX",
@@ -122,6 +124,7 @@ if __name__ == '__main__':
             res = cv2.checkHardwareSupport(feat);
             print("%s = %d" % (featDict[feat], res));
         #cv2.setUseOptimized(onoff)!!!!
+    """
 
     # "Returns the number of logical CPUs available for the process."
     common.DebugPrint("cv2.getNumberOfCPUs() (#logical CPUs) is %s" % str(cv2.getNumberOfCPUs()));
@@ -133,30 +136,10 @@ if __name__ == '__main__':
     common.DebugPrint("cv2.getNumThreads() (#logical CPUs) is %s" % str(cv2.getNumThreads()));
     """
 
-
     videoPathFileNameQ = sys.argv[1]; # input/current video
     videoPathFileNameR = sys.argv[2]; # reference video
 
-
     #!!!!TODO: use getopt() to run Evangelidis' or "Alex's" algorithm, etc
 
-    #if True:
-    if False:
-        import hotshot
-
-        prof = hotshot.Profile("hotshot_edi_stats_Main");
-        #prof.runcall(findquads, Points, threshold, reflect_flag);
-        prof.runcall(ReadVideo.Main, videoPathFileNameQ, videoPathFileNameR);
-        print;
-        prof.close();
-
-        """
-        from hotshot import stats
-
-        s = stats.load("hotshot_edi_stats_findquads");
-        s.sort_stats("time").print_stats();
-        #s.print_stats()
-        """
-    else:
-        ReadVideo.Main(videoPathFileNameQ, videoPathFileNameR);
+    ReadVideo.Main(videoPathFileNameQ, videoPathFileNameR)
 
