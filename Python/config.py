@@ -9,29 +9,25 @@ SAVE_FRAMES = True
 VISUAL_DIFF_FRAMES = True
 SHOW_MASKED_DIFF = True  # Save RGB images masked to only show diff regions.
 
+# We filter out the single-pixel differences that are very small in colour.
+MEANINGFUL_DIFF_THRESHOLD = 30
+
 IMAGES_FOLDER = "Img"
 FRAME_PAIRS_FOLDER = IMAGES_FOLDER + "/Img_Frames_Pairs" # Not really used anymore since we save for efficiency ONLY matches
 FRAME_PAIRS_MATCHES_FOLDER = FRAME_PAIRS_FOLDER + "/Img_Matches"
 
+# First element is for query/input video; 2nd for the reference video.
+initFrame = [0, 0]
+endFrame = [-1, -1]
 
-#if False:
-if True:
-    # First element is for query/input video; 2nd for the reference video
-    initFrame = [0, 0] #928] #1100
-    endFrame = [-1, -1]
-else:
-    # First element is for query/input video; 2nd for the reference video
-    initFrame = [0, 2030] #1900]
-    endFrame = [-1, 2400]
 #initFrameSpatialAlignment #!!!!TODO
 """
 In case we perform exhaustive search, we can "perforate" the
     loops/enumeration of frames of both videos and look at one every
     counterQStep and counterRStep, respectively.
 """
-counterQStep = 1 #25 #200 #10
-counterRStep = 1 #25 #200 #10
-
+counterQStep = 1  # TODO: Anything other than 1 causes an error.
+counterRStep = 1
 
 
 ##################### EVANGELIDIS ALGORITHM RELATED ###########################
@@ -42,27 +38,27 @@ HARRIS_FILENAME_PREFIX = "harloc"
 HARRIS_QUERY_FOLDER_NAME = "harlocs_query"
 HARRIS_REFERENCE_FOLDER_NAME = "harlocs_ref"
 
-# True to use a port of Evangelidis' 2013 TPAMI algorithm from Matlab.
-# False to use our simple (~brute-force) video alignment algo.
+# True --> use a port of Evangelidis' 2013 TPAMI algorithm from Matlab.
+# False --> use our simple (~brute-force) video alignment algo.
 USE_EVANGELIDIS_ALGO = True
 
-MULTI_SCALE_HARRIS = 0 # a la Evangelidis (slower, but good qualitatively)
-#MULTI_SCALE_HARRIS = 1 # using Harris OpenCV primititve - much faster (~10 times) than 0, but poorer results
+# 0 --> Evangelidis' method (slower, but good qualitatively).
+# 1 --> Harris OpenCV primititve - much faster (~10 times), but worse results.
+MULTI_SCALE_HARRIS = 0
 
 # When USE_EVANGELIDIS_ALGO = True, we use this to load the JPEGs we feed the
-#   Matlab code from Evangelidis
-#TESTING_IDENTICAL_MATLAB = True
+# Matlab code from Evangelidis
 TESTING_IDENTICAL_MATLAB = False
 
 #!!!!TODO
 # Types of temporal alignment:
-temporalMethod = 1
 #  full-search (working), visual dictionary (NOT implemented), BoW (NOT implemented)
+temporalMethod = 1
 
 # Decision temporal alignment for the "full-search" temporal alignment method:
-temporalDecisionType = 0 #1
 # 0 --> global solution (multi-scale dynamic programming - the dp3() function)
 # 1 --> causal (local) syncronization
+temporalDecisionType = 0
 
 # other spatial alignment: seq2seq, affine !!!!TODO
 
@@ -85,18 +81,12 @@ Alex: Unfortunately, there is very little documentation on the Python bindings f
 USE_MULTITHREADING = False
 numProcesses = 3
 
-VISUAL_DIFF_FRAMES = False
-
-# We filter out the single-pixel differences between the 2 frames that are very small in colour
-MEANINGFUL_DIFF_THRESHOLD = 30
-
-
 ##################### SPATIAL ALIGNMENT RELATED ###########################
 SKIP_SPATIAL_ALIGNMENT = False
 
 # Usually nof=2 is good for all resolutions we used
-nof = 2; #5; #%number of frames for sub-sequences
-cropflag = 0; #% flag for cropped images (use 0)
+nof = 2 #5; #%number of frames for sub-sequences
+cropflag = 0 #% flag for cropped images (use 0)
 """
 See email Evangelidis, May 7th, 2014:
   Assuming perfect temporal alignment you come to the problem of spatial alignment.
@@ -121,15 +111,11 @@ See email Evangelidis, May 7th, 2014:
 """
 # For HD videos with fisheye and ~10% differences in FOV we used levelsECC = 5
 # For 1/4^2 HD videos with fisheye and ~10% differences in FOV we used levelsECC = 2-3
-levelsECC = 1; #5; #1; #2; #4; #1; #%levels of multi-resolution ECC (use 1 normally, more for stronger roto-tranlation if spatial alignment is not good with 1)
+levelsECC = 1 #5; #1; #2; #4; #1; #%levels of multi-resolution ECC (use 1 normally, more for stronger roto-tranlation if spatial alignment is not good with 1)
 
-iterECC = 15; #%iterations of ECC
+iterECC = 15 #%iterations of ECC
 #
 # The EPS used for the convergence criteria of the ECC algorithm:
-#EPS_ECC = 0.001;
-#EPS_ECC = 0.00001;
-#EPS_ECC = 0.0001;
-#EPS_ECC = 0.00000001;
 EPS_ECC = 0.001  # The default EPS used by cv::findTransformECC()
 
 verboseECC = 1  #% save/see the spatial alignment (and if want, uncomment to get a pause per frame)
@@ -154,13 +140,14 @@ See email from Evangelidis, Apr 14, 2014:
   E.g. if the homography remains fixed within a subsequence, then seq2seq might be better.
   Affine does not make sense if you have same cameras and if you know the ratio of fps."
 """
-USE_ECC_FROM_OPENCV = False # We use the (originally) Matlab implementation from ecc_homo_spacetime.m provided by Evangelidis
-#USE_ECC_FROM_OPENCV = True # This requires OpenCV 3.0
+# Whether to use OpenCV's ECC implementation.
+# True requires OpenCV 3.0+
+# False uses implementation in ecc_homo_spacetime.m provided by Evangelidis.
+USE_ECC_FROM_OPENCV = False
+
 assert((USE_ECC_FROM_OPENCV == False) or (OCV_OLD_PY_BINDINGS == False))
 
 VIDEO_FRAME_RESIZE_SCALING_FACTOR = 1
-#VIDEO_FRAME_RESIZE_SCALING_FACTOR = 0.5
-#VIDEO_FRAME_RESIZE_SCALING_FACTOR = 0.25
 # END SPATIAL ALIGNMENT parameters
 
 
@@ -194,15 +181,11 @@ FEATURE_DETECTOR_AND_MATCHER = "orb-flann" # ORB detector with Flann descriptor 
 #FEATURE_DETECTOR_AND_MATCHER = "surf" # SURF detector with brute-force descriptor matcher
 
 numFeaturesToExtractPerFrame = 1000
-#numFeaturesToExtractPerFrame = 400
 
 ########################### END TEMPORAL ALIGNMENT ############################
 ########################### END TEMPORAL ALIGNMENT ############################
 ########################### END TEMPORAL ALIGNMENT ############################
 ########################### END TEMPORAL ALIGNMENT ############################
-
-
-
 
 
 ############################## SPATIAL ALIGNMENT ###############################
@@ -212,10 +195,10 @@ numFeaturesToExtractPerFrame = 1000
 
 """
 For the spatial alignment algorithm we use:
+ECC, LK, or TEMPORAL_ALIGNMENT_HOMOGRAPHY
 """
-#SPATIAL_ALIGNMENT_ALGO = "ECC"
 SPATIAL_ALIGNMENT_ALGO = "LK"
-#SPATIAL_ALIGNMENT_ALGO = "TEMPORAL_ALIGNMENT_HOMOGRAPHY"
+
 """
     This is simple homography from the feature extraction matching performed
         for temporal alignment.
@@ -223,20 +206,14 @@ SPATIAL_ALIGNMENT_ALGO = "LK"
 
 
 """
-#USE_ECC = False
 USE_ECC = True # We use Evangelidis' ECC algorithm
 
 USE_Lucas_Kanade = True
-#USE_Lucas_Kanade = False
 """
 ########################## END SPATIAL ALIGNMENT ###############################
 ########################## END SPATIAL ALIGNMENT ###############################
 ########################## END SPATIAL ALIGNMENT ###############################
 ########################## END SPATIAL ALIGNMENT ###############################
-
-
-
-
 
 
 ################################# CLUSTERING ##################################
@@ -250,6 +227,5 @@ This is used to TRIGGER ALARM that an object is not in place w.r.t. the
 """
 THRESHOLD_NUM_NONMATCHED_ELEMENTS_IN_CLUSTER = 40
 
-#DISPLAY_PYTHON_CLUSTERING = False
 DISPLAY_PYTHON_CLUSTERING = True
 

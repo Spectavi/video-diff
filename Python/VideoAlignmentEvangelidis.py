@@ -20,9 +20,9 @@ def AlignVideos(captureQ, captureR):
         "VideoAlignmentEvangelidis.AlignVideos(): crossref = %s" % str(crossref))
 
     if config.SKIP_SPATIAL_ALIGNMENT:
-      OutputCrossrefImages(crossref, captureQ, captureR)
+        OutputCrossrefImages(crossref, captureQ, captureR)
     else:
-      SpatialAlignment.SpatialAlignmentEvangelidis(crossref, captureQ, captureR)
+        SpatialAlignment.SpatialAlignmentEvangelidis(crossref, captureQ, captureR)
 
 
 def OutputCrossrefImages(crossref, captureQ, captureR):
@@ -71,7 +71,8 @@ def OutputCrossrefImages(crossref, captureQ, captureR):
                 xxxSum >= config.MEANINGFUL_DIFF_THRESHOLD * diff_mask.shape[2])
             meaningfulIndices = zip(rDiff, cDiff)
             # Create all black image so we can set the diff pixels to white.
-            diff_mask = np.zeros((diff_mask.shape[0], diff_mask.shape[1]), dtype=np.uint8)
+            diff_mask = np.zeros((diff_mask.shape[0], diff_mask.shape[1]),
+                                 dtype=np.uint8)
             diff_mask[(rDiff, cDiff)] = 255
 
             assert rDiff.size == cDiff.size
@@ -90,7 +91,8 @@ def OutputCrossrefImages(crossref, captureQ, captureR):
 
             colorC = 255
             meaningfulContours = 0
-            diff_mask = np.zeros((diff_mask.shape[0], diff_mask.shape[1]), dtype=np.uint8)
+            diff_mask = np.zeros((diff_mask.shape[0], diff_mask.shape[1]),
+                                 dtype=np.uint8)
             for indexC, contour in enumerate(contours):
                 if len(contour) < 15:
                     continue
