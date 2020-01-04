@@ -182,7 +182,8 @@ def MyImageRead(capture, index, grayscale=True):
         common.DebugPrint("MyImageRead(): img.shape = %s" % str(img.shape))
         common.DebugPrint("MyImageRead(): img.dtype = %s" % str(img.dtype))
 
-    img = common.ConvertImgToGrayscale(img)
+    if grayscale:
+        img = common.ConvertImgToGrayscale(img)
 
     if config.VIDEO_FRAME_RESIZE_SCALING_FACTOR != 1:
         # We resize the image
