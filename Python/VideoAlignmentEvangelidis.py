@@ -4,6 +4,7 @@ import common
 import config
 import cv2
 from ecc_homo_spacetime import MyImageRead
+import os
 import synchro_script
 import SpatialAlignment
 
@@ -16,19 +17,24 @@ def AlignVideos(captureQ, captureR):
     if config.PREPROCESS_REFERENCE_VIDEO_ONLY == True:
         return
 
-    print(
-        "VideoAlignmentEvangelidis.AlignVideos(): crossref = %s" % str(crossref))
+    print("VideoAlignmentEvangelidis.AlignVideos(): crossref = %s" % str(
+        crossref))
 
     if config.SKIP_SPATIAL_ALIGNMENT:
         OutputCrossrefImages(crossref, captureQ, captureR)
     else:
-        SpatialAlignment.SpatialAlignmentEvangelidis(crossref, captureQ, captureR)
+        SpatialAlignment.SpatialAlignmentEvangelidis(crossref, captureQ,
+                                                     captureR)
 
 
 def OutputCrossrefImages(crossref, captureQ, captureR):
+    if not os.path.exists(config.FRAME_PAIRS_MATCHES_FOLDER):
+        os.makedirs(config.FRAME_PAIRS_MATCHES_FOLDER)
+
     rframe = None
     gray_rframe = None
     last_r_idx = None
+    t0 = float(cv2.getTickCount())
     for q_idx, r_idx in crossref:
         q_idx = int(q_idx)
         r_idx = int(r_idx)
@@ -78,10 +84,6 @@ def OutputCrossrefImages(crossref, captureQ, captureR):
             assert rDiff.size == cDiff.size
             assert rDiff.size == len(meaningfulIndices)
 
-            """
-            See http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html#findcontours
-            cv2.findContours(image, mode, method[, contours[, hierarchy[, offset]]]) -> contours, hierarchy
-            """
             res = cv2.findContours(
                 image=diff_mask,
                 mode=cv2.RETR_TREE,
@@ -120,14 +122,17 @@ def OutputCrossrefImages(crossref, captureQ, captureR):
                             ("%.6d_ref_masked_diff" % q_idx) + config.imformat,
                             rframe_diff.astype(int))
 
-    # We use q_idx because the ref video is aligned against the query video.
-    # These frames represent the aligned output.
-    cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
-                ("%.6d_query" % q_idx) + config.imformat,
-                qframe.astype(int))
-    cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
-                ("%.6d_ref" % q_idx) + config.imformat,
-                rframe.astype(int))
+        # We use q_idx because the ref video is aligned against the query video.
+        # These frames represent the aligned output.
+        cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
+                    ("%.6d_query" % q_idx) + config.imformat,
+                    qframe.astype(int))
+        cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
+                    ("%.6d_ref" % q_idx) + config.imformat,
+                    rframe.astype(int))
+        cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
+                    ("%.6d_gchan_diff" % q_idx) + config.imformat,
+                    gdiff.astype(int))
 
     print("Saving crossref frames took %.6f [sec]" % (
-        (float(cv2.getTickCount()) - t1) / cv2.getTickFrequency()))
+        (float(cv2.getTickCount()) - t0) / cv2.getTickFrequency()))

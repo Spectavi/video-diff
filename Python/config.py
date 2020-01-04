@@ -12,9 +12,9 @@ SHOW_MASKED_DIFF = True  # Save RGB images masked to only show diff regions.
 # We filter out the single-pixel differences that are very small in colour.
 MEANINGFUL_DIFF_THRESHOLD = 30
 
-IMAGES_FOLDER = "Img"
-FRAME_PAIRS_FOLDER = IMAGES_FOLDER + "/Img_Frames_Pairs" # Not really used anymore since we save for efficiency ONLY matches
-FRAME_PAIRS_MATCHES_FOLDER = FRAME_PAIRS_FOLDER + "/Img_Matches"
+IMAGES_FOLDER = "Img/"
+FRAME_PAIRS_FOLDER = IMAGES_FOLDER + "Img_Frames_Pairs/" # Not really used anymore since we save for efficiency ONLY matches
+FRAME_PAIRS_MATCHES_FOLDER = FRAME_PAIRS_FOLDER + "Img_Matches/"
 
 # First element is for query/input video; 2nd for the reference video.
 initFrame = [0, 0]
