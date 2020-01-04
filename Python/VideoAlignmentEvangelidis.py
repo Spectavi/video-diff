@@ -122,14 +122,16 @@ def OutputCrossrefImages(crossref, captureQ, captureR):
                             ("%.6d_ref_masked_diff" % q_idx) + config.imformat,
                             rframe_diff.astype(int))
 
-        # We use q_idx because the ref video is aligned against the query video.
-        # These frames represent the aligned output.
-        cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
-                    ("%.6d_query" % q_idx) + config.imformat,
-                    qframe.astype(int))
-        cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
-                    ("%.6d_ref" % q_idx) + config.imformat,
-                    rframe.astype(int))
+        if config.SAVE_FRAMES:
+            # We use q_idx because ref video is aligned against the query video.
+            # These frames represent the aligned output.
+            cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
+                        ("%.6d_query" % q_idx) + config.imformat,
+                        qframe.astype(int))
+            cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
+                        ("%.6d_ref" % q_idx) + config.imformat,
+                        rframe.astype(int))
+
         cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
                     ("%.6d_gchan_diff" % q_idx) + config.imformat,
                     gdiff.astype(int))
