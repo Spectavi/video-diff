@@ -1,15 +1,16 @@
+import os
+
+import cv2
 import numpy as np
 
 import common
 import config
-import cv2
 from ecc_homo_spacetime import MyImageRead
-import os
-import synchro_script
 import SpatialAlignment
+import synchro_script
 
 
-def AlignVideos(captureQ, captureR):
+def align_videos(captureQ, captureR):
     print("Entered VideoAlignmentEvangelidis.AlignVideos().")
 
     crossref = synchro_script.TemporalAlignment(captureQ, captureR)
@@ -21,13 +22,13 @@ def AlignVideos(captureQ, captureR):
         crossref))
 
     if config.SKIP_SPATIAL_ALIGNMENT:
-        OutputCrossrefImages(crossref, captureQ, captureR)
+        output_crossref_images(crossref, captureQ, captureR)
     else:
         SpatialAlignment.SpatialAlignmentEvangelidis(crossref, captureQ,
                                                      captureR)
 
 
-def OutputCrossrefImages(crossref, captureQ, captureR):
+def output_crossref_images(crossref, captureQ, captureR):
     if not os.path.exists(config.FRAME_PAIRS_MATCHES_FOLDER):
         os.makedirs(config.FRAME_PAIRS_MATCHES_FOLDER)
 
@@ -69,8 +70,8 @@ def OutputCrossrefImages(crossref, captureQ, captureR):
 
             for i in range(diff_mask.shape[2]):
                 diff_mask[:, :, i] = cv2.GaussianBlur(src=diff_mask[:, :, i],
-                                                ksize=(7, 7),
-                                                sigmaX=10)
+                                                      ksize=(7, 7),
+                                                      sigmaX=10)
 
             xxxSum = diff_mask.sum(axis=2)
             rDiff, cDiff = np.nonzero(
