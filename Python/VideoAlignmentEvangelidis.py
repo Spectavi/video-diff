@@ -10,25 +10,25 @@ import SpatialAlignment
 import synchro_script
 
 
-def align_videos(captureQ, captureR):
+def align_videos(capture_q, capture_r):
     print("Entered VideoAlignmentEvangelidis.AlignVideos().")
 
-    crossref = synchro_script.TemporalAlignment(captureQ, captureR)
+    crossref = synchro_script.TemporalAlignment(capture_q, capture_r)
 
-    if config.PREPROCESS_REFERENCE_VIDEO_ONLY == True:
+    if config.PREPROCESS_REFERENCE_VIDEO_ONLY:
         return
 
     print("VideoAlignmentEvangelidis.AlignVideos(): crossref = %s" % str(
-        crossref))
+          crossref))
 
     if config.SKIP_SPATIAL_ALIGNMENT:
-        output_crossref_images(crossref, captureQ, captureR)
+        output_crossref_images(crossref, capture_q, capture_r)
     else:
-        SpatialAlignment.SpatialAlignmentEvangelidis(crossref, captureQ,
-                                                     captureR)
+        SpatialAlignment.SpatialAlignmentEvangelidis(crossref, capture_q,
+                                                     capture_r)
 
 
-def output_crossref_images(crossref, captureQ, captureR):
+def output_crossref_images(crossref, capture_q, capture_r):
     if not os.path.exists(config.FRAME_PAIRS_MATCHES_FOLDER):
         os.makedirs(config.FRAME_PAIRS_MATCHES_FOLDER)
 
@@ -43,10 +43,10 @@ def output_crossref_images(crossref, captureQ, captureR):
         if common.MY_DEBUG_STDOUT:
             t1 = float(cv2.getTickCount())
 
-        qframe = MyImageRead(captureQ, q_idx, grayscale=False)
+        qframe = MyImageRead(capture_q, q_idx, grayscale=False)
         gray_qframe = common.ConvertImgToGrayscale(qframe)
         if r_idx != last_r_idx:
-            rframe = MyImageRead(captureR, r_idx, grayscale=False)
+            rframe = MyImageRead(capture_r, r_idx, grayscale=False)
             gray_rframe = common.ConvertImgToGrayscale(rframe)
 
         last_r_idx = r_idx
@@ -63,7 +63,6 @@ def output_crossref_images(crossref, captureQ, captureR):
         gdiff[:, :, 1] = gray_rframe  # G-Channel Swap
         gdiff[:, :, 2] = gray_qframe
 
-        ############################# DIFF FRAMES ##############################
         if config.VISUAL_DIFF_FRAMES:
             # Compute difference between frames.
             diff_mask = cv2.absdiff(qframe, rframe)
@@ -73,17 +72,18 @@ def output_crossref_images(crossref, captureQ, captureR):
                                                       ksize=(7, 7),
                                                       sigmaX=10)
 
-            xxxSum = diff_mask.sum(axis=2)
-            rDiff, cDiff = np.nonzero(
-                xxxSum >= config.MEANINGFUL_DIFF_THRESHOLD * diff_mask.shape[2])
-            meaningfulIndices = zip(rDiff, cDiff)
+            diff_mask_sum = diff_mask.sum(axis=2)
+            r_diff, c_diff = np.nonzero(
+                diff_mask_sum >= config.MEANINGFUL_DIFF_THRESHOLD *
+                diff_mask.shape[2])
+            meaningful_indices = zip(r_diff, c_diff)
             # Create all black image so we can set the diff pixels to white.
             diff_mask = np.zeros((diff_mask.shape[0], diff_mask.shape[1]),
                                  dtype=np.uint8)
-            diff_mask[(rDiff, cDiff)] = 255
+            diff_mask[(r_diff, c_diff)] = 255
 
-            assert rDiff.size == cDiff.size
-            assert rDiff.size == len(meaningfulIndices)
+            assert r_diff.size == c_diff.size
+            assert r_diff.size == len(meaningful_indices)
 
             res = cv2.findContours(
                 image=diff_mask,
@@ -92,11 +92,11 @@ def output_crossref_images(crossref, captureQ, captureR):
 
             contours = res[1]
 
-            colorC = 255
-            meaningfulContours = 0
+            color_c = 255
+            meaningful_contours = 0
             diff_mask = np.zeros((diff_mask.shape[0], diff_mask.shape[1]),
                                  dtype=np.uint8)
-            for indexC, contour in enumerate(contours):
+            for index_c, contour in enumerate(contours):
                 if len(contour) < 15:
                     continue
                 else:
@@ -104,9 +104,9 @@ def output_crossref_images(crossref, captureQ, captureR):
                         image=diff_mask,
                         contours=[contour],
                         contourIdx=0,
-                        color=colorC,
+                        color=color_c,
                         thickness=-1)
-                    meaningfulContours += 1
+                    meaningful_contours += 1
 
             cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
                         ("%.6d_diff_mask" % q_idx) + config.imformat,
@@ -117,10 +117,10 @@ def output_crossref_images(crossref, captureQ, captureR):
                 rframe_diff = cv2.bitwise_and(rframe, rframe, mask=diff_mask)
                 # Save the masked diffs.
                 cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
-                            ("%.6d_query_masked_diff" % q_idx) + config.imformat,
+                            ("%.6d_query_diff" % q_idx) + config.imformat,
                             qframe_diff.astype(int))
                 cv2.imwrite(config.FRAME_PAIRS_MATCHES_FOLDER +
-                            ("%.6d_ref_masked_diff" % q_idx) + config.imformat,
+                            ("%.6d_ref_diff" % q_idx) + config.imformat,
                             rframe_diff.astype(int))
 
         if config.SAVE_FRAMES:

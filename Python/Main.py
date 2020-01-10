@@ -37,6 +37,7 @@ def ask_first():
         return
     return
 
+
 def main(argv):
     assert len(sys.argv) >= 3
     if FLAGS.preprocess_ref:
