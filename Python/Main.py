@@ -1,3 +1,4 @@
+from absl import app
 from absl import flags
 import sys
 
@@ -11,8 +12,8 @@ import ReadVideo
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_boolean("preprocess-ref", False, "Preprocess only the reference video.")
-flags.DEFINE_boolean("process-query-and-align-videos", False, "Preprocess both videos and perform alignment.")
+flags.DEFINE_boolean("preprocess_ref", False, "Preprocess only the reference video.")
+flags.DEFINE_boolean("process_query_and_align_videos", False, "Preprocess both videos and perform alignment.")
 
 def ask_first():
     print("To speed up the video alignment on future runs, we save intermediate results for later reuse:\n" 
@@ -30,8 +31,7 @@ def ask_first():
         return
     return
 
-
-if __name__ == '__main__':
+def main(argv):
     assert len(sys.argv) >= 3
     if FLAGS.preprocess_ref:
         config.PREPROCESS_REFERENCE_VIDEO_ONLY = True
@@ -106,3 +106,6 @@ if __name__ == '__main__':
     # TODO: use getopt() to run Evangelidis' or "Alex's" algorithm, etc
 
     ReadVideo.Main(videoPathFileNameQ, videoPathFileNameR)
+
+if __name__ == '__main__':
+    app.run(main)
