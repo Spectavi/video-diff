@@ -12,17 +12,23 @@ import ReadVideo
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_boolean("preprocess_ref", False, "Preprocess only the reference video.")
-flags.DEFINE_boolean("process_query_and_align_videos", False, "Preprocess both videos and perform alignment.")
+flags.DEFINE_boolean("preprocess_ref", False,
+                     "Preprocess only the reference video.")
+flags.DEFINE_boolean("process_query_and_align_videos", False,
+                     "Preprocess both videos and perform alignment.")
+
 
 def ask_first():
-    print("To speed up the video alignment on future runs, we save intermediate results for later reuse:\n" 
+    print("To speed up the video alignment on future runs, we save intermediate"
+          " results for later reuse:\n" 
           "   - Harris features and\n"
           "   - matrices computed in the decision step of temporal alignment.\n"
           "In case you do NOT want to use them we invite you to "
-          "delete this data from the local folder(s) yourself, otherwise we can obtain WRONG results, "
+          "delete this data from the local folder(s) yourself, otherwise we can"
+          " obtain WRONG results, "
           "if the saved data is not corresponding to the videos analyze.\n"
-          "Are you OK to continue and use any of these intermediate results, if any?\n")
+          "Are you OK to continue and use any of these intermediate results, if"
+          " any?\n")
 
     choice = raw_input("Press Y to continue or N to quit:").lower()
     if choice == "n":
@@ -40,7 +46,8 @@ def main(argv):
     else:
         config.PREPROCESS_REFERENCE_VIDEO_ONLY = False
 
-    print("config.PREPROCESS_REFERENCE_VIDEO_ONLY = %s" % str(config.PREPROCESS_REFERENCE_VIDEO_ONLY))
+    print("config.PREPROCESS_REFERENCE_VIDEO_ONLY = %s" % str(
+        config.PREPROCESS_REFERENCE_VIDEO_ONLY))
 
     ask_first()
 
@@ -50,15 +57,14 @@ def main(argv):
     np.show_config()
     scipy.show_config()
 
-
     # See http://docs.scipy.org/doc/numpy/reference/generated/numpy.set_printoptions.html
     # We use 7 digits precision and suppress using scientific notation.
     np.set_printoptions(precision=7, suppress=True,
                         threshold=70000, linewidth=4000)
 
-
     # Inspired from \OpenCV2-Python-Tutorials-master\source\py_tutorials\py_core\py_optimization
-    # normally returns True - relates to using the SIMD extensions of x86: SSX, AVX
+    # normally returns True - relates to using the SIMD extensions of x86:
+    # SSX, AVX
     common.DebugPrint("cv2.useOptimized() is %s" % str(cv2.useOptimized()))
 
     """
@@ -100,12 +106,13 @@ def main(argv):
     common.DebugPrint(
         "cv2.getTickFrequency() is %s" % str(cv2.getTickFrequency()))
 
-    videoPathFileNameQ = sys.argv[1] # input/current video
-    videoPathFileNameR = sys.argv[2] # reference video
+    video_file_q = sys.argv[1]  # input/current video
+    video_file_r = sys.argv[2]  # reference video
 
     # TODO: use getopt() to run Evangelidis' or "Alex's" algorithm, etc
 
-    ReadVideo.Main(videoPathFileNameQ, videoPathFileNameR)
+    ReadVideo.Main(video_file_q, video_file_r)
+
 
 if __name__ == '__main__':
     app.run(main)
