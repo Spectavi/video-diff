@@ -24,8 +24,8 @@ def align_videos(capture_q, capture_r):
     if config.SKIP_SPATIAL_ALIGNMENT:
         output_crossref_images(crossref, capture_q, capture_r)
     else:
-        SpatialAlignment.SpatialAlignmentEvangelidis(crossref, capture_q,
-                                                     capture_r)
+        SpatialAlignment.spatial_alignment_evangelidis(crossref, capture_q,
+                                                       capture_r)
 
 
 def output_crossref_images(crossref, capture_q, capture_r):

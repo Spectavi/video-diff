@@ -83,13 +83,13 @@ def IterationStandaloneMQR(queryFrame):
     tolers = g.tolers;
     """
     common.DebugPrint( \
-              "Entered IterationStandaloneMQR(): crossref=%s, captureQ=%s, "\
-                        "captureR=%s, refined_crossref=%s, warp_p=%s, "
-                        "x0=%s, y0=%s, start=%s, t=%d, iWhile=%d." % \
-                    (str(crossref), str(captureQ), str(captureR), \
+              "Entered IterationStandaloneMQR(): crossref=%s, capture_q=%s, "\
+                        "capture_r=%s, refined_crossref=%s, warp_p=%s, "
+                        "x0=%s, y0=%s, start=%s, t=%d, i_while=%d." % \
+                    (str(crossref), str(capture_q), str(capture_r), \
                          str(g.refined_crossref), str(g.warp_p), \
-                         str(g.x0), str(g.y0), str(g.start), g.t, iWhile));
-    common.DebugPrint("IterationStandalone(): id(g)=%s" % str(id(g)));
+                         str(g.x0), str(g.y0), str(g.start), g.t, i_while));
+    common.DebugPrint("iteration_standalone(): id(g)=%s" % str(id(g)));
     """
 
     # tic

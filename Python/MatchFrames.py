@@ -1449,7 +1449,7 @@ def ProcessInputFrames(captureQ, captureR, fOutput):
 
         ComputeFeatures1(imgQ, counterQ); #!!!!TODO: counterQ already visible in module MatchFrames
 
-        # We set the video stream captureR at the beginning
+        # We set the video stream capture_r at the beginning
         if config.OCV_OLD_PY_BINDINGS:
             captureR.set(cv2.cv.CV_CAP_PROP_POS_FRAMES, 0); #900)
         else:

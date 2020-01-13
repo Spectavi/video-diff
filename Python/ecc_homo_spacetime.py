@@ -92,7 +92,7 @@ def MyImageRead(capture, index, grayscale=True):
             #!!!!TODO: find a good way to prevent reopening every time the VideoCapture device
             """
             CLEARLY NOT A GOOD SOLUTION to prevent reopening every time the VideoCapture device:
-                captureQ = capture
+                capture_q = capture
             """
             if common.MY_DEBUG_STDOUT:
                 common.DebugPrint("MyImageRead(): new capture=%s" % \
@@ -104,7 +104,7 @@ def MyImageRead(capture, index, grayscale=True):
             """
             CLEARLY NOT A GOOD SOLUTION to prevent reopening every time the
                VideoCapture device:
-            captureR = capture
+            capture_r = capture
             """
             if common.MY_DEBUG_STDOUT:
                 common.DebugPrint("MyImageRead(): new capture=%s" % \

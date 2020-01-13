@@ -406,7 +406,7 @@ def ComputeHarlocs(capture, counterStep, folderName, fileNamePrefix,
     return harlocs;
 
 
-#def QuadTreeDecision(captureQ, captureR):
+#def QuadTreeDecision(capture_q, capture_r):
 def QuadTreeDecision():
     """
     global r_path, q_path
@@ -616,7 +616,7 @@ def TemporalAlignment(captureQ, captureR):
     if True:
         # We compute and Store in files the multi-scale Harris features of the reference video
         """
-        harlocsR = ComputeHarlocs(captureR, config.counterRStep, \
+        harlocsR = ComputeHarlocs(capture_r, config.counterRStep, \
                             folderName="/harlocs_ref", fileNamePrefix="harloc");
         """
         harlocsR = ComputeHarlocs(captureR, config.counterRStep, \
@@ -652,7 +652,7 @@ def TemporalAlignment(captureQ, captureR):
                 sumNbytes += hq.nbytes;
             common.DebugPrint("TemporalAlignment(): harlocsQ.nbytes = %s" % str(sumNbytes));
 
-        #res = QuadTreeDecision(captureQ, captureR);
+        #res = QuadTreeDecision(capture_q, capture_r);
         res = QuadTreeDecision();
     else:
 	res = None
