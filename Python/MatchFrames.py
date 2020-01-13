@@ -221,7 +221,7 @@ def SpatialAlignment(win, inputFrame, refFrame, kp_pairs, status=None, H=None):
     if config.SPATIAL_ALIGNMENT_ALGO in ["LK", "TEMPORAL_ALIGNMENT_HOMOGRAPHY"]:
         if config.SPATIAL_ALIGNMENT_ALGO == "LK":
             # Computing homography with Lucas-Kanade's algorithm:
-            H1, status1 = LK.LucasKanade_Homography(inputFrame)
+            H1, status1 = LK.lucas_kanade_homography(inputFrame)
             if H1 != None:
                 # We take the H from the LK algorithm
                 H = H1
