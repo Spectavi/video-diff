@@ -23,15 +23,10 @@ USAGE
   Press left mouse button on a feature point to see its matching point.
 '''
 
-#import cv
 import cv2
-import getopt
 import numpy as np
 import os
 import sys
-import time
-import traceback
-#print __doc__
 
 import common
 import common_cv
@@ -43,7 +38,7 @@ import LK
 
 
 FLANN_INDEX_KDTREE = 1  # bug: flann enums are missing
-FLANN_INDEX_LSH    = 6
+FLANN_INDEX_LSH = 6
 
 
 
@@ -393,9 +388,9 @@ def ClusterUnmatchedKeypoints(Z):
     if True:
         #!!!!TODO: should we cluster also the non-matched features of the reference video (B) ?
         #!!!!TODO TODO_IMPORTANT: more important: now Hierarchical Clustering returns the clusters - you can color them differently
-        Z = Clustering.HierarchicalClustering(Z, N)
+        Z = Clustering.hierarchical_clustering(Z, N)
     else:
-        Clustering.HierarchicalClusteringWithCV2_UNFINISHED(Z, N)
+        Clustering.hierarchical_clustering_with_cv2_unfinished(Z, N)
 
     t2 = float(cv2.getTickCount())
     myTime = (t2 - t1) / cv2.getTickFrequency()

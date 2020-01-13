@@ -3422,7 +3422,7 @@ def ecc_homo_spacetime(img_index, tmplt_index, p_init, t0, n_iters, levels, \
                 Complexity: how much it takes to do hierarchial-clustering,
                             plus Theta(2 * len(meaningfulIndices)).
                 """
-                clustersPixels = Clustering.HierarchicalClustering( \
+                clustersPixels = Clustering.hierarchical_clustering( \
                                                                    meaningfulIndices, \
                                                                    len(meaningfulIndices));
 

@@ -9,10 +9,14 @@ See if you have the time:
 Other ideas at:
     - https://stackoverflow.com/questions/1793532/how-do-i-determine-k-when-using-k-means-clustering
         - "Basically, you want to find a balance between two variables:
-            the number of clusters (k) and the average variance of the clusters."
-        - "First build a minimum spanning tree of your data. Removing the K-1 most expensive edges splits the tree into K clusters,
-            so you can build the MST once, look at cluster spacings / metrics for various K, and take the knee of the curve.
-            This works only for Single-linkage_clustering, but for that it's fast and easy. Plus, MSTs make good visuals."
+            the number of clusters (k) and the average variance of the
+            clusters."
+        - "First build a minimum spanning tree of your data. Removing the K-1
+            most expensive edges splits the tree into K clusters, so you can
+            build the MST once, look at cluster spacings / metrics for various
+            K, and take the knee of the curve.
+            This works only for Single-linkage_clustering, but for that it's
+            fast and easy. Plus, MSTs make good visuals."
 
     - https://stackoverflow.com/questions/15376075/cluster-analysis-in-r-determine-the-optimal-number-of-clusters
 
@@ -24,18 +28,15 @@ NOT useful:
 """
 
 import cv2
+from matplotlib import pyplot as plt
 import numpy as np
 import scipy.cluster.hierarchy as sch
-from matplotlib import pyplot as plt
 
 import common
 import config
 
-
-
-
-colors = ['b', 'r', 'g', 'y', "w", "magenta", "brown", "pink", "orange", \
-                                                                    "purple"]
+colors = ['b', 'r', 'g', 'y', "w", "magenta", "brown", "pink", "orange",
+          "purple"]
 
 
 def sqr(r):
@@ -54,118 +55,39 @@ See if you have the time:
   http://nbviewer.ipython.org/github/herrfz/dataanalysis/tree/master/data/
     http://nbviewer.ipython.org/github/herrfz/dataanalysis/blob/master/week4/clustering_example.ipynb
 """
-def HierarchicalClustering(Z, N):
-    if False:
-        print "Z = %s" % str(Z);
 
-    """
-    Z = []
-      Traceback (most recent call last):
-        File "ReadAVI.py", line 365, in <module>
-          Main()
-        File "ReadAVI.py", line 295, in Main
-          res = MatchFrames.Main_img2(img2, counter2)
-        File "/home/alexsusu/drone-diff/02/MatchFrames.py", line 776, in Main_img2
-          res = match_and_draw("Image Match")
-        File "/home/alexsusu/drone-diff/02/MatchFrames.py", line 593, in match_and_draw
-          nonp1 = ClusterUnmatchedKeypoints(nonp1)
-        File "/home/alexsusu/drone-diff/02/MatchFrames.py", line 110, in ClusterUnmatchedKeypoints
-          Z = Clustering.HierarchicalClustering(Z, N)
-        File "/home/alexsusu/drone-diff/02/Clustering.py", line 64, in HierarchicalClustering
-          dSch = sch.distance.pdist(Z)
-        File "/usr/lib/python2.7/dist-packages/scipy/spatial/distance.py", line 1173, in pdist
-          raise ValueError('A 2-dimensional array must be passed.')
-      ValueError: A 2-dimensional array must be passed.
-
-    Z = [[ 265.  127.]]
-      Traceback (most recent call last):
-        File "ReadAVI.py", line 365, in <module>
-          Main()
-        File "ReadAVI.py", line 295, in Main
-          res = MatchFrames.Main_img2(img2, counter2)
-        File "/home/alexsusu/drone-diff/02/MatchFrames.py", line 776, in Main_img2
-          res = match_and_draw("Image Match")
-        File "/home/alexsusu/drone-diff/02/MatchFrames.py", line 593, in match_and_draw
-          nonp1 = ClusterUnmatchedKeypoints(nonp1)
-        File "/home/alexsusu/drone-diff/02/MatchFrames.py", line 110, in ClusterUnmatchedKeypoints
-          Z = Clustering.HierarchicalClustering(Z, N)
-        File "/home/alexsusu/drone-diff/02/Clustering.py", line 65, in HierarchicalClustering
-          dSch = sch.distance.pdist(Z)
-        File "/usr/lib/python2.7/dist-packages/scipy/spatial/distance.py", line 1173, in pdist
-          raise ValueError('A 2-dimensional array must be passed.')
-      ValueError: A 2-dimensional array must be passed.
-
-    Z = [[ 430.           61.        ]
-         [ 265.          127.        ]
-         [ 300.           79.        ]
-         [ 481.           54.        ]
-         [ 450.00003052   91.20000458]
-         [ 327.62884521  143.07841492]
-         [ 261.27365112   99.53282166]
-         [ 292.62652588  119.43939209]
-         [ 313.52841187  152.28521729]
-         [ 358.31817627  101.52348328]]
-      Traceback (most recent call last):
-        File "ReadAVI.py", line 365, in <module>
-          Main()
-        File "ReadAVI.py", line 295, in Main
-          res = MatchFrames.Main_img2(img2, counter2)
-        File "/home/alexsusu/drone-diff/02/MatchFrames.py", line 776, in Main_img2
-          res = match_and_draw("Image Match")
-        File "/home/alexsusu/drone-diff/02/MatchFrames.py", line 593, in match_and_draw
-          nonp1 = ClusterUnmatchedKeypoints(nonp1)
-        File "/home/alexsusu/drone-diff/02/MatchFrames.py", line 110, in ClusterUnmatchedKeypoints
-          Z = Clustering.HierarchicalClustering(Z, N)
-        File "/home/alexsusu/drone-diff/02/Clustering.py", line 145, in HierarchicalClustering
-          numElems[e] += 1
-      IndexError: list index out of range
-    """
-
-    if False:
-        Z = [[ 430.,          61.        ],
-             [ 265.,         127.        ],
-             [ 300.,          79.        ],
-             [ 481.,          54.        ],
-             [ 450.00003052,  91.20000458],
-             [ 327.62884521, 143.07841492],
-             [ 261.27365112,  99.53282166],
-             [ 292.62652588, 119.43939209],
-             [ 313.52841187, 152.28521729],
-             [ 358.31817627, 101.52348328]];
-
-    N = len(Z);
-    common.DebugPrint("HierarchicalClustering(): N = %d" % N);
+# TODO: n is not used, remove or use.
+def hierarchical_clustering(z, n):
+    n = len(z)
+    common.DebugPrint("hierarchical_clustering(): n = %d" % n)
 
     # Note: Z is not standard list, but a numpy array
-    if len(Z) < 10: #or Z == []:
-        common.DebugPrint("HierarchicalClustering(): Bailing out of hierarchical " \
-              "clustering since too few elements provided (and I guess we" \
-              "could have issues)");
-        return [];
+    if len(z) < 10:  # or Z == []:
+        common.DebugPrint("hierarchical_clustering(): Bailing out of "
+                          "hierarchical clustering since too few elements "
+                          "provided (and I guess we could have issues)")
+        return []
 
     # Vector of (N choose 2) pairwise Euclidian distances
-    dSch = sch.distance.pdist(Z);
-    dMax = dSch.max();
-
-    if False:
-        common.DebugPrint("Z = %s" % str(Z));
+    d_sch = sch.distance.pdist(z)
+    d_max = d_sch.max()
 
     # This parameter is CRUCIAL for the optimal number of clusters generated
-    #threshold = 0.1 * dMax;
-    threshold = 0.05 * dMax; # This parameter works better for the videos from Lucian
+    # This parameter works better for the videos from Lucian
+    threshold = 0.05 * d_max
 
     """
-    I did not find much information on the linkage matrix (linkageMatrix), but
+    I did not find much information on the linkage matrix (linkage_matrix), but
         from my understanding it is the direct result of the hierarchical
         clustering, which is performed by recursively splitting clusters,
         forming a dendrogram forest of trees (see if you have time
             https://stackoverflow.com/questions/5461357/hierarchical-k-means-in-opencv-without-knowledge-of-k
             "a forest of hierarchical clustering trees").
       The linkage matrix is stores on each row data for a clustered point:
-            - the last element in the row is the leaf in the dendrogram tree forrest
-                the point belongs to. The leaf does not really tell you to which
-                final cluster the point belongs to - (IMPORTANT) for this, we
-                have the function sch.fcluster().
+            - the last element in the row is the leaf in the dendrogram tree
+                forest the point belongs to. The leaf does not really tell you
+                to which final cluster the point belongs to - (IMPORTANT) for
+                this, we have the function sch.fcluster().
       See if you have the time (for some better understanding):
         https://stackoverflow.com/questions/11917779/how-to-plot-and-annotate-hierarchical-clustering-dendrograms-in-scipy-matplotlib
 
@@ -175,128 +97,103 @@ def HierarchicalClustering(Z, N):
       See if you have the time:
         https://stackoverflow.com/questions/16883412/how-do-i-get-the-subtrees-of-dendrogram-made-by-scipy-cluster-hierarchy
     """
-    linkageMatrix = sch.linkage(dSch, "single");
-    common.DebugPrint("linkageMatrix = %s" % str(linkageMatrix));
+    linkage_matrix = sch.linkage(d_sch, "single")
+    common.DebugPrint("linkage_matrix = %s" % str(linkage_matrix))
 
     # Inspired from https://stackoverflow.com/questions/7664826/how-to-get-flat-clustering-corresponding-to-color-clusters-in-the-dendrogram-cre
-    indexCluster = sch.fcluster(linkageMatrix, threshold, "distance");
-    common.DebugPrint("indexCluster = %s" % str(indexCluster));
+    index_cluster = sch.fcluster(linkage_matrix, threshold, "distance")
+    common.DebugPrint("index_cluster = %s" % str(index_cluster))
 
-    cMax = -1;
+    c_max = -1
 
-    numElems = [0] * (N + 1); # We "truncate" later the ending zeros from numElems
+    # We "truncate" later the ending zeros from num_elems
+    num_elems = [0] * (n + 1)
     # IMPORTANT: It appears the ids of the clusters start from 1, not 0
-    for e in indexCluster:
-        #print "e = %s" % str(e)
-        numElems[e] += 1;
-        if cMax < e:
-            cMax = e;
-    #cMax += 1
+    for e in index_cluster:
+        # print "e = %s" % str(e)
+        num_elems[e] += 1
+        if c_max < e:
+            c_max = e
 
-    # cMax is the MAXIMUM optimal number of clusters after the Hierarchical clustering
+    # c_max is the MAXIMUM optimal number of clusters after the hierarchical
+    # clustering is performed.
+    common.DebugPrint("c_max (the MAX id of final clusters) = %d" % c_max)
 
-    common.DebugPrint("cMax (the MAX id of final clusters) = %d" % cMax);
-
-    numElems = numElems[0 : cMax + 1];
-    common.DebugPrint("numElems = %s" % str(numElems));
+    num_elems = num_elems[0 : c_max + 1]
+    common.DebugPrint("num_elems = %s" % str(num_elems))
     """
     # We can also use:
-    numElems.__delslice__(cMax + 1, len(numElems))
+    num_elems.__delslice__(c_max + 1, len(num_elems))
     but it's sort of deprecated
         - see http://docs.python.org/release/2.5.2/ref/sequence-methods.html
     """
 
-    numClusters = 0;
-    for e in numElems:
+    num_clusters = 0
+    for e in num_elems:
         if e != 0:
-            numClusters += 1;
+            num_clusters += 1
 
-    common.DebugPrint("numClusters (the optimal num of clusters) = %d" % \
-                                                                numClusters);
-    assert numClusters == cMax;
+    common.DebugPrint("num_clusters (the optimal num of clusters) = %d" %
+                      num_clusters)
+    assert num_clusters == c_max
 
-    numClustersAboveThreshold = 0;
-    for i in range(cMax + 1):
-        if numElems[i] >= \
-                        config.THRESHOLD_NUM_NONMATCHED_ELEMENTS_IN_CLUSTER:
-            common.DebugPrint("numElems[%d] = %d" % (i, numElems[i]));
-            numClustersAboveThreshold += 1;
+    num_clusters_above_threshold = 0
+    for i in range(c_max + 1):
+        if num_elems[i] >= \
+          config.THRESHOLD_NUM_NONMATCHED_ELEMENTS_IN_CLUSTER:
+            common.DebugPrint("num_elems[%d] = %d" % (i, num_elems[i]))
+            num_clusters_above_threshold += 1
 
-    common.DebugPrint("numClustersAboveThreshold = %d" % \
-                                                    numClustersAboveThreshold)
+    common.DebugPrint("num_clusters_above_threshold = %d" %
+                      num_clusters_above_threshold)
 
-    RETURN_ONLY_BIGGEST_CLUSTER = False; #True;
-    if RETURN_ONLY_BIGGEST_CLUSTER == True:
-        # !!!!TODO: find biggest cluster - sort them after numElems, etc
-        res = [];
-        for i in range(N):
-            if indexCluster[i] == numClusters: # We start numbering the clusters from 1
-                res.append(Z[i]);
+    # TODO: Move this to config?
+    return_only_biggest_cluster = False
+    if return_only_biggest_cluster:
+        # TODO: find biggest cluster - sort them after num_elems, etc
+        res = []
+        for i in range(n):
+            # We start numbering the clusters from 1.
+            if index_cluster[i] == num_clusters:
+                res.append(z[i])
     else:
-        if False:
-            # We return only the elements from the MEANINGFUL clusters
-            res = [];
-            for i in range(N):
-                if numElems[indexCluster[i]] >= \
-                            config.THRESHOLD_NUM_NONMATCHED_ELEMENTS_IN_CLUSTER:
-                    res.append(Z[i]);
-        else:
-            res = {};
-            for i in range(N):
-                if numElems[indexCluster[i]] >= \
-                            config.THRESHOLD_NUM_NONMATCHED_ELEMENTS_IN_CLUSTER:
-                    if indexCluster[i] not in res:
-                        res[indexCluster[i]] = [];
-                    res[indexCluster[i]].append(Z[i]);
+        res = {}
+        for i in range(n):
+            if num_elems[index_cluster[i]] >= \
+              config.THRESHOLD_NUM_NONMATCHED_ELEMENTS_IN_CLUSTER:
+                if index_cluster[i] not in res:
+                    res[index_cluster[i]] = []
+                res[index_cluster[i]].append(z[i])
 
     if config.USE_GUI and config.DISPLAY_PYTHON_CLUSTERING:
         # We clear the figure and the axes
-        plt.clf();
-        plt.cla();
+        plt.clf()
+        plt.cla()
 
         # Plot the data
-        for i in range(N): #indexCluster:
-            #print "Z[i, 0] = %.2f, Z[i, 1] = %.2f" % (Z[i, 0], Z[i, 1])
-            if False:
-                # We plot only the "interesting" clusters
-                if numElems[indexCluster[i]] >= \
-                        config.THRESHOLD_NUM_NONMATCHED_ELEMENTS_IN_CLUSTER:
-                    plt.scatter(Z[i, 0], Z[i, 1], c=colors[indexCluster[i]]);
-            else:
-                try:
-                    colCluster = colors[indexCluster[i]];
-                except: # IndexError: list index out of range
-                    colCluster = 2;
-                plt.scatter(Z[i, 0], Z[i, 1], c=colCluster)
+        for i in range(n):  # index_cluster:
+            # print "Z[i, 0] = %.2f, Z[i, 1] = %.2f" % (Z[i, 0], Z[i, 1])
+            try:
+                col_cluster = colors[index_cluster[i]]
+            except:  # IndexError: list index out of range
+                col_cluster = 2
+            plt.scatter(z[i, 0], z[i, 1], c=col_cluster)
 
-        plt.xlabel("Height. (numClusters = %d, numClustersAboveThreshold = %d)" % \
-                                    (numClusters, numClustersAboveThreshold));
+        plt.xlabel(
+            "Height. (num_clusters = %d, num_clusters_above_threshold = %d)" %
+            (num_clusters, num_clusters_above_threshold))
 
-        plt.ylabel("Weight");
+        plt.ylabel("Weight")
 
         # From http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.axis
-        v = plt.axis();
+        v = plt.axis()
         # We invert the y to have 0 up and x axis to have 0
-        v = (0, v[1], v[3], 0);
-        #plt.gca().invert_yaxis()
-        plt.axis(v);
+        v = (0, v[1], v[3], 0)
+        plt.axis(v)
 
-        plt.show();
-        if False:
-            plt.savefig("plot-%s.png" % (prefix));
+        plt.show()
 
-        if False:
-            sch.dendrogram(linkageMatrix,
-                       truncate_mode='lastp',
-                       color_threshold=1,
-                       show_leaf_counts=True)
-
-            plt.show();
-            if False:
-                plt.savefig("plot-%s.png" % (prefix));
-
-    return res;
-
+    return res
 
 
 """
@@ -305,20 +202,16 @@ Note: unfortunately, cv::flann::hierarchicalClustering()
     doesn't have Python bindings, so we have to sort of
     implement it :) .
 """
-def HierarchicalClusteringWithCV2_UNFINISHED(Z, N):
-    #X = np.random.randint(25,50,(25,2))
-    #Y = np.random.randint(60,85,(25,2))
-    #Z = np.vstack((X, Y))
 
+
+def hierarchical_clustering_with_cv2_unfinished(z, n):
     # We choose an ~optimal number of clusters
-    #k = 4
 
-    minValidity = 1000000
-    minValidityK = -1
+    min_validity = 1000000
+    min_validity_k = -1
 
     for k in range(2, 10 + 1):
-        A = [None] * k
-        #avg = [0] * k
+        a = [None] * k
 
         """
         Inspired a bit from
@@ -331,14 +224,14 @@ def HierarchicalClusteringWithCV2_UNFINISHED(Z, N):
 
         t1 = float(cv2.getTickCount())
 
-        #ret, label, center = cv2.kmeans(Z, 2, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
-        ret, label, center = cv2.kmeans(Z, k, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+        ret, label, center = cv2.kmeans(z, k, criteria, 10,
+                                        cv2.KMEANS_RANDOM_CENTERS)
 
         t2 = float(cv2.getTickCount())
-        myTime = (t2 - t1) / cv2.getTickFrequency()
-        common.DebugPrint( \
-            "HierarchicalClusteringWithCV2_UNFINISHED(): " \
-            "cv2.kmeans() took %.5f [sec]" % myTime)
+        my_time = (t2 - t1) / cv2.getTickFrequency()
+        common.DebugPrint(
+            "HierarchicalClusteringWithCV2_UNFINISHED(): "
+            "cv2.kmeans() took %.5f [sec]" % my_time)
 
         common.DebugPrint("ret = %s" % str(ret))
         common.DebugPrint("label = %s" % str(label))
@@ -346,11 +239,11 @@ def HierarchicalClusteringWithCV2_UNFINISHED(Z, N):
 
         # Now separate the data, Note the flatten()
         for i in range(k):
-            A[i] = Z[label.ravel() == i]
+            a[i] = z[label.ravel() == i]
 
-        common.DebugPrint("A[0] = %s" % str(A[0]))
-        common.DebugPrint("A[0][:, 0] = %s" % str(A[0][:, 0]))
-        common.DebugPrint("A[0][:, 1] = %s" % str(A[0][:, 1]))
+        common.DebugPrint("A[0] = %s" % str(a[0]))
+        common.DebugPrint("A[0][:, 0] = %s" % str(a[0][:, 0]))
+        common.DebugPrint("A[0][:, 1] = %s" % str(a[0][:, 1]))
 
         """
         Following Section 3.2 from http://www.csse.monash.edu.au/~roset/papers/cal99.pdf :
@@ -360,16 +253,12 @@ def HierarchicalClusteringWithCV2_UNFINISHED(Z, N):
         intra = 0
         for i in range(k):
             # Gives exception: "TypeError: only length-1 arrays can be converted to Python scalars"
-            #for y in range(A[i]):
-            for x in range(len(A[i])):
-                #intra += sqr(x[0] - center[:,0])
-                intra += np.square(A[i][x, 0] - center[i, 0]) + \
-                            np.square(A[i][x, 1] - center[i, 1])
-                #intra += sqr(A[i][x, 0] - center[i, 0]) + sqr(A[i][x, 1] - center[i, 1])
-                #avg[i] += A[i]
-        intra /= N
+            for x in range(len(a[i])):
+                intra += np.square(a[i][x, 0] - center[i, 0]) + \
+                            np.square(a[i][x, 1] - center[i, 1])
+        intra /= n
 
-        distMin = 1000000
+        dist_min = 1000000
         for i in range(k):
             for j in range(i + 1, k):
                 dist = np.square(center[i, 0] - center[j, 0]) + \
@@ -379,9 +268,9 @@ def HierarchicalClusteringWithCV2_UNFINISHED(Z, N):
                         sqr(center[i, 1] - center[j, 1])
                 """
                 common.DebugPrint("dist = %s" % str(dist))
-                if dist < distMin:
-                    distMin = dist
-        inter = distMin
+                if dist < dist_min:
+                    dist_min = dist
+        inter = dist_min
 
         """
         We want to minimize intra (clusters be dense) and
@@ -389,9 +278,9 @@ def HierarchicalClusteringWithCV2_UNFINISHED(Z, N):
         """
         validity = intra / inter
 
-        if minValidity > validity:
-            minValidity = validity
-            minValidityK = k
+        if min_validity > validity:
+            min_validity = validity
+            min_validity_k = k
 
         if config.USE_GUI:
             # We clear the figure and the axes
@@ -404,19 +293,17 @@ def HierarchicalClusteringWithCV2_UNFINISHED(Z, N):
                 Note: A[0][:,0] (i.e., [:,0] is a numpy-specific
                     "split"-operator, not working for standard Python lists.
                 """
-                plt.scatter(A[i][:,0], A[i][:,1], c=colors[i])
+                plt.scatter(a[i][:, 0], a[i][:, 1], c=colors[i])
 
-            plt.scatter(center[:,0], center[:,1], s=80, c="b", marker="s")
+            plt.scatter(center[:, 0], center[:, 1], s=80, c="b", marker="s")
 
             plt.xlabel(
-                "Height. Also: k=%d, intra=%.1f, inter=%.1f, validity = %.4f" % \
+                "Height. Also: k=%d, intra=%.1f, inter=%.1f, validity = %.4f" %
                 (k, intra, inter, validity))
 
             plt.ylabel("Weight")
 
             plt.show()
-            if False:
-                plt.savefig("plot-%s.png" % (prefix))
 
         """
         TODO!!!! Implement section 4 from http://www.csse.monash.edu.au/~roset/papers/cal99.pdf:
@@ -427,5 +314,5 @@ def HierarchicalClusteringWithCV2_UNFINISHED(Z, N):
         """
         # !!!!TODO: .... DO THE IMPLEMENTATION, WHITE BOY
 
-    common.DebugPrint("IMPORTANT: minValidityK = %d" % minValidityK)
+    common.DebugPrint("IMPORTANT: min_validity_k = %d" % min_validity_k)
 

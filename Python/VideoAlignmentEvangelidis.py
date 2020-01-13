@@ -88,7 +88,7 @@ def output_crossref_images(crossref, capture_q, capture_r):
             res = cv2.findContours(
                 image=diff_mask,
                 mode=cv2.RETR_TREE,
-                method=cv2.CHAIN_APPROX_SIMPLE)  # Gives error: <<ValueError: too many values to unpack>>
+                method=cv2.CHAIN_APPROX_SIMPLE)
 
             contours = res[1]
 
