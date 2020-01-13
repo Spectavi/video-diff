@@ -598,10 +598,10 @@ def TestGoProCameraVideos():
     videoPathFileNameR = path + "GOPR7344_90-95.MP4";
 
     import ReadVideo
-    captureQ, frameCountQ, resVidQ = ReadVideo.OpenVideoCapture(videoPathFileNameQ, 0);
+    captureQ, frameCountQ, resVidQ = ReadVideo.open_video_capture(videoPathFileNameQ, 0);
     common.DebugPrint("Alex: frameCountQ = %d" % frameCountQ);
 
-    captureR, frameCountR, resVidR = ReadVideo.OpenVideoCapture(videoPathFileNameR, 1);
+    captureR, frameCountR, resVidR = ReadVideo.open_video_capture(videoPathFileNameR, 1);
     common.DebugPrint("Alex: frameCountR = %d" % frameCountR);
 
     """
@@ -906,10 +906,10 @@ class TestSuite(unittest.TestCase):
         assert config.TESTING_IDENTICAL_MATLAB == True;
 
         import ReadVideo
-        captureQ, frameCountQ, resVidQ = ReadVideo.OpenVideoCapture(videoPathFileNameQ, 0);
+        captureQ, frameCountQ, resVidQ = ReadVideo.open_video_capture(videoPathFileNameQ, 0);
         common.DebugPrint("Alex: frameCountQ = %d" % frameCountQ);
 
-        captureR, frameCountR, resVidR = ReadVideo.OpenVideoCapture(videoPathFileNameR, 1);
+        captureR, frameCountR, resVidR = ReadVideo.open_video_capture(videoPathFileNameR, 1);
         common.DebugPrint("Alex: frameCountR = %d" % frameCountR);
 
         """

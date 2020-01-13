@@ -112,7 +112,7 @@ def main(argv):
 
     # TODO: use getopt() to run Evangelidis' or "Alex's" algorithm, etc
 
-    ReadVideo.Main(video_file_q, video_file_r)
+    ReadVideo.main(video_file_q, video_file_r)
 
 
 if __name__ == '__main__':
