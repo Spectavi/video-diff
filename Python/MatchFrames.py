@@ -264,11 +264,11 @@ def SpatialAlignment(win, inputFrame, refFrame, kp_pairs, status=None, H=None):
         # Note that ECC.template_image is a numpy.ndarray
 
         """
-        ECC.template_image = Misc.ConvertNPToCVMat(ECC.template_image)
-        ECC.target_image = Misc.ConvertNPToCVMat(ECC.target_image)
+        ECC.template_image = Misc.convert_np_to_cvmat(ECC.template_image)
+        ECC.target_image = Misc.convert_np_to_cvmat(ECC.target_image)
         """
-        ECC.target_image = Misc.ConvertNPToIplImage(ECC.target_image)
-        ECC.template_image = Misc.ConvertNPToIplImage(ECC.template_image)
+        ECC.target_image = Misc.convert_np_to_ipl_image(ECC.target_image)
+        ECC.template_image = Misc.convert_np_to_ipl_image(ECC.template_image)
 
         if config.USE_GUI or config.SAVE_FRAMES:
             vis = np.zeros((max(hQ, hR), wQ + wR), np.uint8)
