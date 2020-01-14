@@ -3057,7 +3057,7 @@ def ecc_homo_spacetime(img_index, tmplt_index, p_init, t0, n_iters, levels, \
 
             if common.MY_DEBUG_STDOUT:
                 common.DebugPrint( \
-                    "ecc_homo_spacetime(): refFrame.shape = %s" % \
+                    "ecc_homo_spacetime(): ref_frame.shape = %s" % \
                                                     str(refFrame.shape));
 
             #!!!!TODO_PROFOUND: understand why we get poorer results with warpPerspective than with interp_space_time - see /home/asusu/drone-diff_test_against_EV_videos/Videos/output (*_good_new/new0.png) VS *_good.png
@@ -3066,8 +3066,8 @@ def ecc_homo_spacetime(img_index, tmplt_index, p_init, t0, n_iters, levels, \
             """
             If you look at http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#void%20warpAffine%28InputArray%20src,%20OutputArray%20dst,%20InputArray%20M,%20Size%20dsize,%20int%20flags,%20int%20borderMode,%20const%20Scalar&%20borderValue%29
               you will see that M should be a 2*3 matrix.
-                wout = cv2.warpAffine(src=refFrame, M=warp_p, \
-                                dsize=(refFrame.shape[1], refFrame.shape[0]));
+                wout = cv2.warpAffine(src=ref_frame, M=warp_p, \
+                                dsize=(ref_frame.shape[1], ref_frame.shape[0]));
             """
             #wout = wout.T;
         else:
@@ -3132,8 +3132,8 @@ def ecc_homo_spacetime(img_index, tmplt_index, p_init, t0, n_iters, levels, \
                     "ecc_homo_spacetime(): (again) VISUAL_DIFF_FRAMES = %s" % \
                                             str(config.VISUAL_DIFF_FRAMES));
             """
-            # Compute difference between frames inputFrame and refFrame:
-            cv2.absdiff(src1=inputFrame, src2=refFrame, dst=imgDiff)
+            # Compute difference between frames input_frame and ref_frame:
+            cv2.absdiff(src1=input_frame, src2=ref_frame, dst=imgDiff)
             """
             #!!!!TODO TODO TODO: use for xxx only 1 color channel (i.e., make xxx 2d matrix)
             xxx[:, :, 0] -= wout;

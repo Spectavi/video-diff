@@ -86,7 +86,7 @@ def iteration_standalone(i_while):
 
     try:
         common.DebugPrint(
-            "SpatialAlignment.iteration_standalone(i_while=%d)\n" %
+            "spatial_alignment.iteration_standalone(i_while=%d)\n" %
             i_while)
 
         if config.affine_time == 0:
@@ -316,10 +316,10 @@ def spatial_alignment_evangelidis(crossref, capture_q, capture_r):
            in parallel - no GIL issue if each core has it's own VM)
         """
         pool = multiprocessing.Pool(processes=config.numProcesses)
-        print("SpatialAlignment(): Spawned a pool of %d workers" %
+        print("spatial_alignment(): Spawned a pool of %d workers" %
               config.numProcesses)
 
-        common.DebugPrint("SpatialAlignment(): __name__ = %s" % str(__name__))
+        common.DebugPrint("spatial_alignment(): __name__ = %s" % str(__name__))
 
         if True:
             list_params = range(0, x0.size)  # TODO: use counterStep
@@ -521,7 +521,7 @@ def spatial_alignment_evangelidis(crossref, capture_q, capture_r):
                                                    fit[i_while].ecc[
                                                        0, iterECC0].t
                 common.DebugPrint(
-                    "SpatialAlignment(): Finished iteration i_while=%d" %
+                    "spatial_alignment(): Finished iteration i_while=%d" %
                     i_while)
 
             common.DebugPrint("spatial_alignment_evangelidis(): warp_p "

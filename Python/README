@@ -185,10 +185,10 @@ If we want to get a feeling how much time is spent in the various operations loo
     detector.detectAndCompute() took 0.018876 [sec]
     knnMatch() and filter_matches() took 0.015406 [sec]
     cv2.findHomography() took 0.086174 [sec]
-    SpatialAlignment() took 0.018335 [sec]
+    spatial_alignment() took 0.018335 [sec]
     **
-    ComputeFeatures1(): detector.detectAndCompute() took 0.010006 [sec]
-    ComputeFeaturesAndMatch2(): detector.detectAndCompute() took 0.011082 [sec]
-    FeatureMatchAndHomography(): SpatialAlignment() took 0.017158 [sec]
-    ClusterUnmatchedKeypoints(): HierarchicalClustering() took 3 or 7.88220 [sec]??? - probably because of loading first time the modules
-    ClusterUnmatchedKeypoints(): HierarchicalClustering() took 0.09826 [sec]
+    compute_features_1(): detector.detectAndCompute() took 0.010006 [sec]
+    compute_features_and_match_2(): detector.detectAndCompute() took 0.011082 [sec]
+    feature_match_and_homography(): spatial_alignment() took 0.017158 [sec]
+    cluster_unmatched_keypoints(): HierarchicalClustering() took 3 or 7.88220 [sec]??? - probably because of loading first time the modules
+    cluster_unmatched_keypoints(): HierarchicalClustering() took 0.09826 [sec]

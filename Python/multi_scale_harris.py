@@ -16,7 +16,7 @@ def StoreMultiScaleHarrisFeatures(pathFileName, harrisFeatures):
     fOutput = open(pathFileName, "wt");
 
     for e in harrisFeatures:
-        #fOutput.write("%f, %f, %d\n" % (e[0], e[1], e[2])); #.7f
+        #f_output.write("%f, %f, %d\n" % (e[0], e[1], e[2])); #.7f
         fOutput.write("%.9f, %.9f, %d\n" % (e[0], e[1], e[2])); #.7f
     fOutput.close();
 

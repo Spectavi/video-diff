@@ -147,7 +147,7 @@ def MyImageReadMSH(index):
     else:
         #common.DebugPrint("Alex: frameR = %d" % frameR);
 
-        #if myIndex > numFramesR:
+        #if myIndex > num_frames_r:
         #    break;
 
         #ret, img = r_path.read();
@@ -355,7 +355,7 @@ def ComputeHarlocs(capture, counterStep, folderName, fileNamePrefix,
                 """
                 cv2.imwrite(fileName, img);
 
-        #if ret == False: #MatchFrames.counterQ == 3:
+        #if ret == False: #MatchFrames.counter_q == 3:
         if (ret == False) or ((counter > numFrames) or \
                              (config.endFrame[indexVideo] != -1 and \
                               counter > config.endFrame[indexVideo])):
@@ -625,12 +625,12 @@ def TemporalAlignment(captureQ, captureR):
                             fileNameExtension=config.HARRIS_FILENAME_EXTENSION,
                             indexVideo=1);
         if common.MY_DEBUG_STDOUT:
-            common.DebugPrint("TemporalAlignment(): len(harlocsR) = %s" % str(len(harlocsR)));
+            common.DebugPrint("temporal_alignment(): len(harlocsR) = %s" % str(len(harlocsR)));
             sumNbytes = 0;
             for hr in harlocsR:
                 sumNbytes += hr.nbytes;
-            common.DebugPrint("TemporalAlignment(): harlocsR.nbytes = %s" % str(sumNbytes));
-            #common.DebugPrint("TemporalAlignment(): harlocsR.nbytes = %s" % str(harlocsR.nbytes));
+            common.DebugPrint("temporal_alignment(): harlocsR.nbytes = %s" % str(sumNbytes));
+            #common.DebugPrint("temporal_alignment(): harlocsR.nbytes = %s" % str(harlocsR.nbytes));
 
 
     if config.PREPROCESS_REFERENCE_VIDEO_ONLY == False:
@@ -645,12 +645,12 @@ def TemporalAlignment(captureQ, captureR):
                             fileNameExtension=config.HARRIS_FILENAME_EXTENSION,
                             indexVideo=0);
 	if common.MY_DEBUG_STDOUT:
-            common.DebugPrint("TemporalAlignment(): len(harlocsQ) = %s" % \
+            common.DebugPrint("temporal_alignment(): len(harlocsQ) = %s" % \
                                 str(len(harlocsQ)));
             sumNbytes = 0;
             for hq in harlocsQ:
                 sumNbytes += hq.nbytes;
-            common.DebugPrint("TemporalAlignment(): harlocsQ.nbytes = %s" % str(sumNbytes));
+            common.DebugPrint("temporal_alignment(): harlocsQ.nbytes = %s" % str(sumNbytes));
 
         #res = QuadTreeDecision(capture_q, capture_r);
         res = QuadTreeDecision();
@@ -659,7 +659,7 @@ def TemporalAlignment(captureQ, captureR):
 
     totalT2 = float(cv2.getTickCount());
     myTime = (totalT2 - totalT1) / cv2.getTickFrequency();
-    print("TemporalAlignment() took %.6f [sec]" % (myTime));
+    print("temporal_alignment() took %.6f [sec]" % (myTime));
 
     return res;
 
@@ -730,7 +730,7 @@ class TestSuite(unittest.TestCase):
         resCrossref[:, 1] -= 2001;
 
         #common.DebugPrint("resCrossref = %s" % str(resCrossref));
-        #crossref = TemporalAlignment(None, None);
+        #crossref = temporal_alignment(None, None);
         #crossref = QuadTreeDecision(None, None);
         crossref = QuadTreeDecision();
         common.DebugPrint("crossref = %s" % str(crossref));

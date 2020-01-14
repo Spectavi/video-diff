@@ -40,17 +40,17 @@ def benchmark():
             frame1 = captureQ.get(cv2.CAP_PROP_POS_FRAMES)
         common.DebugPrint("Alex: frame1 = %d" % frame1)
 
-        MatchFrames.counterQ = int(frame1)
+        MatchFrames.counter_q = int(frame1)
 
         common.DebugPrint(
-            "Alex: MatchFrames.counterQ = %d" % MatchFrames.counterQ)
+            "Alex: MatchFrames.counter_q = %d" % MatchFrames.counter_q)
 
         ret_q, img_q = captureQ.read()
         if not ret_q:
             break
 
         # TODO: This method below doesn't seem to exist?
-        # MatchFrames.Main_img1(img_q, MatchFrames.counterQ)
+        # MatchFrames.Main_img1(img_q, MatchFrames.counter_q)
 
     # 36.2 secs (38.5 secs with Convert to RGB)
     common.DebugPrint("Alex: time after Feature Extraction of all frames of "
@@ -65,16 +65,16 @@ def benchmark():
 
         common.DebugPrint("Alex: frame_r = %d" % frame_r)
 
-        MatchFrames.counterR = int(frame_r)
+        MatchFrames.counter_r = int(frame_r)
 
-        common.DebugPrint("Alex: counterR = %d" % MatchFrames.counterR)
+        common.DebugPrint("Alex: counter_r = %d" % MatchFrames.counter_r)
 
         ret_r, img_r = captureR.read()
         if not ret_r:
             break
 
         # TODO: This method below doesn't seem to exist?
-        # MatchFrames.Main_img2(img_r, MatchFrames.counterR)
+        # MatchFrames.Main_img2(img_r, MatchFrames.counter_r)
 
     # Note: 47.2 secs (56.7 secs with Convert to RGB)
     common.DebugPrint("Alex: time after Feature Extraction of all frames of "
@@ -235,13 +235,13 @@ def main(video_file_q, video_file_r):
         SimAnneal.LIMIT = frameCountR
         SimAnneal.captureR = captureR
 
-    print("ReadVideo.Main(): time before PreMain() = %s" %
+    print("ReadVideo.Main(): time before pre_main() = %s" %
           common.GetCurrentDateTimeStringWithMilliseconds())
 
     if not config.USE_EVANGELIDIS_ALGO:
-        MatchFrames.PreMain(nFramesQ=frameCountQ, nFramesR=frameCountR)
+        MatchFrames.pre_main(n_frames_q=frameCountQ, n_frames_r=frameCountR)
 
-    common.DebugPrint("Main(): time after PreMain() = %s" %
+    common.DebugPrint("Main(): time after pre_main() = %s" %
                       common.GetCurrentDateTimeStringWithMilliseconds())
 
     # Here we start the (main part of the) algorithm
@@ -251,7 +251,7 @@ def main(video_file_q, video_file_r):
         import VideoAlignmentEvangelidis
         VideoAlignmentEvangelidis.align_videos(captureQ, captureR)
     else:
-        MatchFrames.ProcessInputFrames(captureQ, captureR, f_output)
+        MatchFrames.process_input_frames(captureQ, captureR, f_output)
 
     if config.USE_GUI:
         cv2.destroyAllWindows()

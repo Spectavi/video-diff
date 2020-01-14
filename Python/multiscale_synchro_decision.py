@@ -237,7 +237,7 @@ def ComputeCost(crossref, V, fileName="crossref.txt"):
     #!!!!TODO TODO: print also a synchronization error (look at TPAMI 2013 Evangelidis)
 
     #myText = "crossref = %s" % crossref2;
-    #fOutput = open("crossref.txt", "wt");
+    #f_output = open("crossref.txt", "wt");
     fOutput = open(fileName, "wt");
     fOutput.write(myText2);
     fOutput.close();
@@ -290,13 +290,13 @@ def causal(Vspace, H, numFramesQ, numFramesR, BOV_flag, cropflag, const_type, no
 
     """
     common.DebugPrint("causal(): At entrance Vspace=%s,\nH=%s, \n" \
-        "numFramesQ=%s, numFramesR=%s, BOV_flag=%d, cropflag=%d, const_type=%d, " \
+        "num_frames_q=%s, num_frames_r=%s, BOV_flag=%d, cropflag=%d, const_type=%d, " \
         "nop=%d" % \
-        (str(Vspace), str(H), numFramesQ, numFramesR, BOV_flag, cropflag, \
+        (str(Vspace), str(H), num_frames_q, num_frames_r, BOV_flag, cropflag, \
             const_type, nop));
     """
     print("causal(): At entrance \n" \
-        "    numFramesQ=%s, numFramesR=%s, BOV_flag=%d, cropflag=%d, const_type=%d, " \
+        "    num_frames_q=%s, num_frames_r=%s, BOV_flag=%d, cropflag=%d, const_type=%d, " \
         "    nop=%d" % \
         (numFramesQ, numFramesR, BOV_flag, cropflag, \
             const_type, nop));
@@ -405,8 +405,8 @@ def causal(Vspace, H, numFramesQ, numFramesR, BOV_flag, cropflag, const_type, no
 
     #QD=dir([q_path 'multiharlocs*.mat']);
     #RD=dir([r_path 'multiharlocs*.mat']);
-    #QD = [None] * numFramesQ;
-    #RD = [None] * numFramesR;
+    #QD = [None] * num_frames_q;
+    #RD = [None] * num_frames_r;
 
     #cross=zeros(length(QD),2);
     #crossref = np.zeros( (len(QD), 2) );
@@ -511,7 +511,7 @@ def causal(Vspace, H, numFramesQ, numFramesR, BOV_flag, cropflag, const_type, no
     We substitute iFor -1 with iFor since arrays start with 0 in Python,
         not with 1 like in Matlab
     """
-    #for iFor in range(1, numFramesQ + 1):
+    #for iFor in range(1, num_frames_q + 1):
     for iFor in range(numFramesQ):
         #cross(i,1)=str2num(QD(i).name(end-9:end-4));
         crossref[iFor, 0] = iFor; #TODO - think well
@@ -596,13 +596,13 @@ def causal(Vspace, H, numFramesQ, numFramesR, BOV_flag, cropflag, const_type, no
 
     if False: #True:
         #print("Am here1111");
-        #causal_Alex(Vspace, numFramesQ, numFramesR);
+        #causal_Alex(Vspace, num_frames_q, num_frames_r);
 
         #print("Am here2222");
-        #dp3(Vspace, numFramesR, numFramesQ, BOV_flag);
+        #dp3(Vspace, num_frames_r, num_frames_q, BOV_flag);
 
         #print("Am here3333");
-        #dp_Alex(Vspace, numFramesR, numFramesQ, BOV_flag);
+        #dp_Alex(Vspace, num_frames_r, num_frames_q, BOV_flag);
         dp_Alex(Vspace, numFramesR, numFramesQ, BOV_flag, PREV_REF=5, NEXT_REF=-1);
 
     return crossref;
@@ -944,7 +944,7 @@ def dp_Alex(Vspace, numFramesR, numFramesQ, BOV_flag, PREV_REF=5, NEXT_REF=0):
     #NEXT_REF = -1; #3; #2
 
     """
-    Vspace is a matrix with shape (numFramesR, numFramesQ).
+    Vspace is a matrix with shape (num_frames_r, num_frames_q).
     See multiscale_quad_retrieval.py for definition:
         Votes_space = np.zeros( (len(RD), len(QD)) );
     """
@@ -953,8 +953,8 @@ def dp_Alex(Vspace, numFramesR, numFramesQ, BOV_flag, PREV_REF=5, NEXT_REF=0):
 
     common.DebugPrint("Entered dp_Alex(): Running dynamic programming...");
 
-    #causal(Vspace, H=None, numFramesQ, numFramesR, BOV_flag, crop_flag, const_type, nop=0);
-    #causal(Vspace, None, numFramesQ, numFramesR, BOV_flag, 0, 1, 0);
+    #causal(Vspace, H=None, num_frames_q, num_frames_r, BOV_flag, crop_flag, const_type, nop=0);
+    #causal(Vspace, None, num_frames_q, num_frames_r, BOV_flag, 0, 1, 0);
 
     if True:
         r, c, d = Vspace.shape;
@@ -1094,7 +1094,7 @@ def dp_Alex(Vspace, numFramesR, numFramesQ, BOV_flag, PREV_REF=5, NEXT_REF=0):
         #print("Am here2222");
         dp3Orig(Vspace, numFramesR, numFramesQ, BOV_flag);
 
-        #def causal(Vspace, H, numFramesQ, numFramesR, BOV_flag, cropflag, const_type, nop=0):
+        #def causal(Vspace, H, num_frames_q, num_frames_r, BOV_flag, cropflag, const_type, nop=0):
         H = np.zeros( (10000, 10000, 5), dtype=np.int8 );
         causal(Vspace, H, numFramesQ, numFramesR, BOV_flag=0, cropflag=0, const_type=1, nop=0);
 
