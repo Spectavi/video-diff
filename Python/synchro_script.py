@@ -491,9 +491,9 @@ def QuadTreeDecision():
 
                 common.DebugPrint("QuadTreeDecision(): md_threshold = %s" % str(md_threshold));
 
-                #[Votes_space(:,:,s),H(:,:,s)]=multiscale_quad_retrieval(tree, r_path, q_path, md_threshold, st_threshold, all_ori, all_id, all_max, all_cen,nos, s, cropflag, sequence);
-                # Votes_space(:,:,s),H(:,:s)  =multiscale_quad_retrieval(tree, r_path, q_path, md_threshold, st_threshold, all_ori, all_id, all_max, all_cen, nos, s, cropflag, sequence)
-                #Votes_space[:, :, s - 1], H[:, :,s - 1] = multiscale_quad_retrieval.multiscale_quad_retrieval(r_quadsTree, harlocsR, harlocsQ, md_threshold, st_threshold, all_ori, all_id, all_max, all_cen, nos, s, cropflag, sequence)
+                #[Votes_space(:,:,s),H(:,:,s)]=multiscale_quad_retrieval(tree, r_path, q_path, md_threshold, st_threshold, all_ori, all_id, all_max, all_cen,nos, s, crop_flag, sequence);
+                # Votes_space(:,:,s),H(:,:s)  =multiscale_quad_retrieval(tree, r_path, q_path, md_threshold, st_threshold, all_ori, all_id, all_max, all_cen, nos, s, crop_flag, sequence)
+                #Votes_space[:, :, s - 1], H[:, :,s - 1] = multiscale_quad_retrieval.multiscale_quad_retrieval(r_quads_tree, harlocsR, harlocsQ, md_threshold, st_threshold, all_ori, all_id, all_max, all_cen, nos, s, crop_flag, sequence)
                 Votes_space_res, H_res = multiscale_quad_retrieval.multiscale_quad_retrieval(r_quadsTree, \
                                             harlocsR, harlocsQ, md_threshold, \
                                             st_threshold, all_ori, all_id, \
@@ -557,7 +557,7 @@ def QuadTreeDecision():
         if config.temporalDecisionType == 1:
             # causal solution - "local"
 
-            #cross=multiscale_synchro_decision(Votes_space, H, q_path, r_path, BOV_flag, cropflag, const_type);
+            #cross=multiscale_synchro_decision(Votes_space, H, q_path, r_path, BOV_flag, crop_flag, const_type);
             crossref = multiscale_synchro_decision.causal( \
                         Votes_space, H, numFramesQ, numFramesR, BOV_flag, cropflag, \
                         const_type);
@@ -671,7 +671,6 @@ import unittest
 class TestSuite(unittest.TestCase):
     def testSynchro(self):
         common.MY_DEBUG_STDOUT = True;
-        multiscale_quad_retrieval.DBGPRINT = True;
 
         #assert config.temporalDecisionType == 1; #1
         """

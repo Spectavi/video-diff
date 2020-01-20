@@ -3,7 +3,7 @@ import numpy as np
 import common
 
 
-#function ordvot=spatial_consistency(space_xy,qcen, M, st_threshold, cropflag)
+#function ordvot=spatial_consistency(space_xy,qcen, M, st_threshold, crop_flag)
 def spatial_consistency(space_xy, qcen, M, st_threshold, cropflag):
     ordvot = np.zeros((M, 1))
 

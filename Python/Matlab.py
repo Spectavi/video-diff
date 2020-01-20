@@ -2963,7 +2963,7 @@ class TestSuite(unittest.TestCase):
         RD_end = 2012
 
         l = []
-        #for i in range(RD_start, RD_end + 1):
+        #for i in range(rd_start, rd_end + 1):
         for i in range(RD_end - RD_start + 1):
             l += [RD_start + i] * howMany[i]
 

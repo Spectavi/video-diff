@@ -44,7 +44,7 @@ def multiscale_quad_tree(r_path, threshold, scale_index):
         common.DebugPrintErrorTrace()
 
     if not found_files:
-        RD = r_path
+        rd = r_path
 
         # OpenCV's KD-tree implementation does NOT accept float64
         all_quads = np.array([]).astype(np.float32)
@@ -53,7 +53,7 @@ def multiscale_quad_tree(r_path, threshold, scale_index):
         all_max = np.array([]).astype(np.float32)
         all_ori = np.array([]).astype(np.float32)
 
-        n_d = np.zeros((len(RD), 1))
+        n_d = np.zeros((len(rd), 1))
 
         if common.MY_DEBUG_STDOUT:
             common.DebugPrint("multiscale_quad_tree(): n_d.shape = "
@@ -61,9 +61,9 @@ def multiscale_quad_tree(r_path, threshold, scale_index):
             common.DebugPrint("multiscale_quad_tree(): n_d = %s" % str(n_d))
 
         # Alex: for each reference video frame we compute the quads
-        for iFor in range(len(RD)):
+        for iFor in range(len(rd)):
             # Alex: IMPORTANT: This loads into pp the multiscale Harris feature
-            # saved in file r_path+RD(i).name
+            # saved in file r_path+rd(i).name
             # load harris locations of image (already computed)
             pp = r_path[iFor]
 
@@ -86,7 +86,6 @@ def multiscale_quad_tree(r_path, threshold, scale_index):
 
             if common.MY_DEBUG_STDOUT:
                 common.DebugPrint("Initially:")
-
                 common.DebugPrint(
                     "  multiscale_quad_tree(): all_quads.shape = %s" % str(
                         all_quads.shape))
@@ -108,7 +107,6 @@ def multiscale_quad_tree(r_path, threshold, scale_index):
                 common.DebugPrint(
                     "  multiscale_quad_tree(): all_ori.shape = %s" % str(
                         all_ori.shape))
-
                 common.DebugPrint(
                     "  multiscale_quad_tree(): ori.shape = %s" % str(ori.shape))
                 common.DebugPrint(
@@ -129,7 +127,6 @@ def multiscale_quad_tree(r_path, threshold, scale_index):
                     "  multiscale_quad_tree(): out.shape = %s" % str(out.shape))
                 common.DebugPrint(
                     "  multiscale_quad_tree(): out = %s" % str(out))
-                #pass
 
             if out.size == 0:
                 assert(cen.size == 0)
@@ -209,32 +206,26 @@ def multiscale_quad_tree(r_path, threshold, scale_index):
         common.DebugPrint(
             "  multiscale_quad_tree(): all_id.shape = %s" % str(all_id.shape))
         common.DebugPrint("  multiscale_quad_tree(): all_id = %s" % str(all_id))
-
         common.DebugPrint(
             "  multiscale_quad_tree(): all_cen.shape = %s" % str(all_cen.shape))
         common.DebugPrint(
             "  multiscale_quad_tree(): all_cen = %s" % str(all_cen))
-
         common.DebugPrint(
             "  multiscale_quad_tree(): all_max.shape = %s" % str(all_max.shape))
         common.DebugPrint(
             "  multiscale_quad_tree(): all_max = %s" % str(all_max))
-
         common.DebugPrint(
             "  multiscale_quad_tree(): all_ori.shape = %s" % str(all_ori.shape))
         common.DebugPrint(
             "  multiscale_quad_tree(): all_ori = %s" % str(all_ori))
-
         common.DebugPrint(
             "  multiscale_quad_tree(): n_d.shape = %s" % str(n_d.shape))
         common.DebugPrint("  multiscale_quad_tree(): n_d = %s" % str(n_d))
-
         common.DebugPrint(
             "  multiscale_quad_tree(): all_quads.shape = %s" % str(
                 all_quads.shape))
         common.DebugPrint(
             "  multiscale_quad_tree(): all_quads = %s" % str(all_quads))
-
         common.DebugPrint(
             "  multiscale_quad_tree(): all_quads.shape before "
             "kd-tree = %s" % str(all_quads.shape))
@@ -252,4 +243,3 @@ def multiscale_quad_tree(r_path, threshold, scale_index):
     print("multiscale_quad_tree() took %.6f [sec]" % my_time)
 
     return tree, all_id, all_cen, all_max, all_ori, n_d, all_quads
-
